@@ -12,6 +12,10 @@
       "ios",
       "android",
       "web"
-    ]
+    ],
+    "splash": {
+      "image": "app/assets/1440x2960/splash.png",
+      "resizeMode": "cover"
+    }
   }
 }
