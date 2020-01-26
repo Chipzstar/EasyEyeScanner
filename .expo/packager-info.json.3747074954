@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 7380,
+  "packagerPort": null,
+  "packagerPid": null,
   "expoServerNgrokUrl": "https://rm-cyp.chipzstar.easyeyescanner.exp.direct",
   "packagerNgrokUrl": "https://packager.rm-cyp.chipzstar.easyeyescanner.exp.direct",
-  "ngrokPid": 11108
+  "ngrokPid": 13228
 }

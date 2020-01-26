@@ -1,38 +1,46 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-const instructions = Platform.select({
-	ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-	android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu',
-});
+import {StyleSheet} from 'react-native';
+import { Root } from "native-base";
+import AppContainer from "./app/routes/router";
+import 'react-native-gesture-handler';
+import * as Font from 'expo-font';
+import {AppLoading} from "expo";
 
 export default class App extends Component {
+
+	constructor() {
+		super();
+		this.state = {
+			fontLoaded: false
+		}
+	}
+
+	async componentDidMount() {
+		await Font.loadAsync({
+			'Roboto_regular': require('./app/assets/fonts/Roboto-Regular.ttf'),
+			'Roboto_black': require('./app/assets/fonts/Roboto-Black.ttf'),
+			'Roboto_black_italic': require('./app/assets/fonts/Roboto-BlackItalic.ttf'),
+			'Roboto_bold': require('./app/assets/fonts/Roboto-Bold.ttf'),
+			'Roboto_bold_italic': require('./app/assets/fonts/Roboto-BoldItalic.ttf'),
+			'Roboto_italic': require('./app/assets/fonts/Roboto-Italic.ttf'),
+			'Roboto_light': require('./app/assets/fonts/Roboto-Light.ttf'),
+			'Roboto_light_italic': require('./app/assets/fonts/Roboto-LightItalic.ttf'),
+			'Roboto_medium': require('./app/assets/fonts/Roboto-Medium.ttf'),
+			'Roboto_thin': require('./app/assets/fonts/Roboto-Thin.ttf'),
+		});
+		this.setState({fontLoaded: true})
+	}
+
 	render() {
+		if (!this.state.fontLoaded) {
+			return (
+				<Root>
+					<AppLoading />
+				</Root>
+			);
+		}
 		return (
-			<View style={styles.container}>
-				<Text style={styles.welcome}>Welcome to React Native!</Text>
-				<Text style={styles.instructions}>To get started, edit App.js</Text>
-				<Text style={styles.instructions}>{instructions}</Text>
-			</View>
+			<AppContainer/>
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#F5FCFF',
-	},
-	welcome: {
-		fontSize: 20,
-		textAlign: 'center',
-		margin: 10,
-	},
-	instructions: {
-		textAlign: 'center',
-		color: '#333333',
-		marginBottom: 5,
-	},
-});
