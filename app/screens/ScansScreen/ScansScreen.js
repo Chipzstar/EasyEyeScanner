@@ -1,18 +1,25 @@
-import React, {Component} from 'react';
-//import {Text, View, Image} from 'react-native';
-import {Container, Header, Button, Body, Title, Left, Right, Icon, Content} from "native-base";
-//import DocumentScanCard from '../../components/CardTile';
-//import card_image_1 from "../../assets/images/card-image.png";
+import React, {Component } from 'react';
+import {Container, Header, Button, Body, Title, Left, Right, Icon, Content, Fab} from "native-base";
+import {FlatList, View} from "react-native";
+import DocumentScanCard from '../../components/CardTile';
+import card_image_1 from "../../assets/images/card-image.png";
+import card_image_2 from "../../assets/images/card-image-2.png";
 
+import card_image_3 from "../../assets/images/card-image-3.png";
 //styles
-//import styles from "./styles";
+import styles from "./styles";
 
 class ScansScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			username: "Chisom",
-			active: false
+			active: false,
+			documents: [
+				{title: "Document 1", imageURI: card_image_1},
+				{title: "Document 2", imageURI: card_image_2},
+				{title: "Document 3", imageURI: card_image_3},
+			]
 		};
 	}
 
@@ -25,6 +32,7 @@ class ScansScreen extends Component {
 
 	render() {
 		const { navigation } = this.props;
+		let documents = this.state.documents;
 		return (
 			<Container>
 				<Header iosBarStyle={"dark-content"}>
@@ -46,10 +54,21 @@ class ScansScreen extends Component {
 					</Right>
 				</Header>
 
-				<Content>
-					{/*<DocumentScanCard name={"Document 1"} date={this.state.date} image={card_image_1}/>*/}
+				<Content padder
+					style={{flex: 1}}
+					contentContainerStyle={{flex: 1}} // important!
+				>
+					<FlatList
+						data={this.state.documents}
+						renderItem={({item}) => (
+							<DocumentScanCard name={item.title} date={this.state.date} image={item.imageURI}/>
+						)}
+						keyExtractor={(item) => documents.indexOf(item).toString()}
+						showsVerticalScrollIndicator={false}
+					>
+					</FlatList>
 				</Content>
-				{/*<Fab
+				<Fab
 					active={this.state.active}
 					direction="up"
 					containerStyle={{ }}
@@ -63,7 +82,7 @@ class ScansScreen extends Component {
 					<Button style={{ backgroundColor: '#3B5998' }}>
 						<Icon name="image" />
 					</Button>
-				</Fab>*/}
+				</Fab>
 			</Container>
 		)
 	}
