@@ -9,4 +9,9 @@ export default (styles = StyleSheet.create({
 		paddingTop: 40,
 		paddingHorizontal: 20,
 	},
+	thumbnail: {
+		width: 300,
+		height: 300,
+		resizeMode: "contain"
+	}
 }));
