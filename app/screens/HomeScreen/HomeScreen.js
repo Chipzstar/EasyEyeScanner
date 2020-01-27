@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Container, Header, Button, Body, Title, Left, Right, Icon, Content, Fab} from "native-base";
-import {FlatList, View} from "react-native";
+import {FlatList, StatusBar} from "react-native";
 import {Constants, Permissions} from 'react-native-unimodules';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -16,7 +16,7 @@ import styles from "./styles";
 import DocumentScanCard from '../../components/CardComponent';
 import CameraComponent from "../../components/Camera/CameraComponent";
 
-class ScansScreen extends Component {
+class HomeScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -32,7 +32,8 @@ class ScansScreen extends Component {
 	}
 
 	componentDidMount() {
-		this.getPermissionAsync().then(res => console.log('Permission granted!'));
+		StatusBar.setHidden(true, 'slide');
+		this.getPermissionAsync().then(res => console.log('Permission granted!', res));
 		const date = new Date().getDate();
 		const month = new Date().getMonth() + 1; //Current Month
 		const year = new Date().getFullYear();
@@ -78,7 +79,7 @@ class ScansScreen extends Component {
 			return <CameraComponent hideCamera={this.goHome.bind(this)}/>
 		} else {
 			return (
-				<Container style={{marginTop : 25}}>
+				<Container>
 					<Header iosBarStyle={"dark-content"}>
 						<Left>
 							<Button
@@ -139,4 +140,4 @@ class ScansScreen extends Component {
 	}
 }
 
-export default ScansScreen;
+export default HomeScreen;

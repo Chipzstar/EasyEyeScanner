@@ -1,10 +1,10 @@
 import React from "react";
 import {createStackNavigator} from "react-navigation-stack";
-import ScansScreen from '../screens/ScansScreen/ScansScreen';
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
 
 const screens = {
 	Home: {
-		screen: ScansScreen,
+		screen: HomeScreen,
 	}
 };
 
@@ -15,6 +15,6 @@ const config = {
 	}
 };
 
-const ScansStack = createStackNavigator(screens, config);
+const HomeStack = createStackNavigator(screens, config);
 
-export default ScansStack;
+export default HomeStack;
