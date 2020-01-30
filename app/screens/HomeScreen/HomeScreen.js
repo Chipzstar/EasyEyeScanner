@@ -104,7 +104,7 @@ class HomeScreen extends Component {
 					         contentContainerStyle={{flex: 1}} // important!
 					>
 						<FlatList
-							data={this.state.documents}
+							data={documents}
 							renderItem={({item}) => (
 								<DocumentScanCard name={item.title} date={this.state.date} image={item.imageURI}/>
 							)}

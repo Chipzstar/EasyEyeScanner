@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import {Text, View, Dimensions, StatusBar} from 'react-native';
+import {Text, View, StatusBar, Button, Alert, BackHandler} from 'react-native';
 import {Camera} from 'expo-camera';
 import {Permissions} from 'react-native-unimodules';
-import {BackHandler} from "react-native";
 import {withNavigation} from 'react-navigation';
 
 //icons and components
 import CameraToolbar from './CameraToolbar';
 import Gallery from './GalleryComponent';
 
-const {WIDTH, HEIGHT} = Dimensions.get('window');
 import styles from "./styles";
 
 class CameraComponent extends Component {
@@ -63,8 +61,19 @@ class CameraComponent extends Component {
 		return true;
 	};
 
+	showAlert = () => {
+		Alert.alert('Please take a picture before attempting to Save PDF!')
+	};
+
 	render() {
 		const {hasCameraPermission, cameraType, flashMode, captures, capturing} = this.state;
+		const activeButton = (
+			<Button style={styles.topToolbar} onPress={() => this.props.navigation.navigate('ConfirmPDF')} title={'Save PDF'}
+			        accessibilityLabel={'SAVE AS PDF'}/>
+		);
+		const disabledButton = (
+			<Button onPress={() => this.showAlert()} title={'Save PDF'} disabled/>
+		);
 		if (hasCameraPermission === null) {
 			return <View/>
 		} else if (!hasCameraPermission) {
@@ -72,18 +81,20 @@ class CameraComponent extends Component {
 		} else {
 			return (
 				<React.Fragment>
-					<View style={{}}>
+					{captures.length > 0 ? activeButton : disabledButton}
+					<View>
 						<Camera
 							style={styles.preview}
 							type={cameraType}
 							flashMode={flashMode}
+							ratio={'16:9'}
 							ref={(ref) => {
 								this.camera = ref
 							}}
 						/>
 					</View>
 
-					{captures.length > 0 && <Gallery captures={captures}/>}
+					{captures.length > 0 && <Gallery captures={captures} navigation={this.props.navigation}/>}
 
 					<CameraToolbar
 						capturing={capturing}

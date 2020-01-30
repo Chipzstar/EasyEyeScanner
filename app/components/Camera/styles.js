@@ -1,4 +1,6 @@
 import {StyleSheet, Dimensions} from "react-native";
+import {Header} from "native-base";
+import React from "react";
 
 const {width: WIDTH} = Dimensions.get("window"); //Max Width of phone screen
 const {height: HEIGHT} = Dimensions.get("window"); //Max Height of phone screen
@@ -18,10 +20,14 @@ export default (styles = StyleSheet.create({
 		right: 0,
 		bottom: 0,
 	},
-	bottomCameraIcon: {
-		alignSelf: 'flex-end',
-		alignItems: 'center',
-		backgroundColor: 'transparent',
+	topToolbar: {
+		height: 45,
+		borderColor: 'red',
+		borderStyle: 'solid',
+		borderWidth: 2,
+		color: 'transparent'
+		//left: WIDTH*0.5,
+		//alignSelf: 'flex-end'
 	},
 	bottomToolbar: {
 		width: WIDTH,
@@ -59,5 +65,10 @@ export default (styles = StyleSheet.create({
 	galleryImage: {
 		width: 75,
 		height: 75
+	},
+	iconText: {
+		color: 'white'
 	}
 }));
+
+//{borderColor: 'red', borderStyle: 'solid', borderWidth: 2}

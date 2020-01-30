@@ -1,17 +1,17 @@
 import React from 'react';
-import {View, Image, ScrollView} from 'react-native';
+import {TouchableOpacity, Image, ScrollView} from 'react-native';
 
 import styles from './styles';
 
-export default ({captures = []}) => (
+export default ({captures = [], navigation}) => (
 	<ScrollView
 		horizontal={true}
 		style={[styles.bottomToolbar, styles.galleryContainer]}
 	>
-		{captures.map(({uri}) => (
-			<View style={styles.galleryImageContainer} key={uri}>
+		{captures.map(({uri, height, width}) => (
+			<TouchableOpacity style={styles.galleryImageContainer} key={uri} onPress={() => navigation.navigate('ImagePreview', {uri: uri, width: width, height: height})}>
 				<Image source={{uri}} style={styles.galleryImage}/>
-			</View>
+			</TouchableOpacity>
 		))}
 	</ScrollView>
 );
