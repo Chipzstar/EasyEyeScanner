@@ -1,14 +1,14 @@
 import React from "react";
 import {createAppContainer} from "react-navigation";
-import { createDrawerNavigator } from "react-navigation-drawer";
-import scansStack from './scansStack';
+import {createDrawerNavigator} from "react-navigation-drawer";
+import homeStack from './homeStack';
 import AboutScreen from '../screens/AboutScreen/AboutScreen'
 import HelpScreen from '../screens/HelpScreen/HelpScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
 
 const screens = {
-	Scans: {
-		screen: scansStack,
+	Home: {
+		screen: homeStack,
 	},
 	About: {
 		screen: AboutScreen,
@@ -31,10 +31,10 @@ const screens = {
 };
 
 const config = {
-	initialRouteName: "Scans"
+	initialRouteName: "Home"
 };
 
-export const HomeStack = createDrawerNavigator(screens, config);
+export const MainStack = createDrawerNavigator(screens, config);
 
 /*export const RootNavigator = createSwitchNavigator(
 	{
@@ -47,6 +47,6 @@ export const HomeStack = createDrawerNavigator(screens, config);
 	}
 );*/
 
-const AppContainer = createAppContainer(HomeStack);
+const AppContainer = createAppContainer(MainStack);
 
 export default AppContainer;

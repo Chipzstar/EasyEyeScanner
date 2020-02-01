@@ -1,10 +1,19 @@
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import { Root } from "native-base";
+import {Root} from "native-base";
 import AppContainer from "./app/routes/router";
 import 'react-native-gesture-handler';
 import * as Font from 'expo-font';
 import {AppLoading} from "expo";
+import {createStore, combineReducers} from "redux";
+import {Provider} from 'react-redux'
+
+import capturesReducer from './store/reducers/capturesReducer'
+
+const rootReducer = combineReducers({
+	captures: capturesReducer
+});
+
+const reduxStore = createStore(rootReducer);
 
 export default class App extends Component {
 
@@ -35,12 +44,14 @@ export default class App extends Component {
 		if (!this.state.fontLoaded) {
 			return (
 				<Root>
-					<AppLoading />
+					<AppLoading/>
 				</Root>
 			);
 		}
 		return (
-			<AppContainer/>
+			<Provider store={reduxStore}>
+				<AppContainer/>
+			</Provider>
 		);
 	}
 }
