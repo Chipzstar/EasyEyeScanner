@@ -3,6 +3,8 @@ import {Text, View, StatusBar, Button, Alert, BackHandler} from 'react-native';
 import {Camera} from 'expo-camera';
 import {Permissions} from 'react-native-unimodules';
 import {withNavigation} from 'react-navigation';
+import {connect} from 'react-redux';
+import {addPhoto} from "../../../store/actions/capturesAction";
 
 //icons and components
 import CameraToolbar from './CameraToolbar';
@@ -14,7 +16,6 @@ class CameraComponent extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			captures: [],
 			capturing: null,
 			hasCameraPermission: null,
 			cameraType: Camera.Constants.Type.back,
@@ -26,12 +27,13 @@ class CameraComponent extends Component {
 	setCameraType = (cameraType) => this.setState({cameraType});
 
 	snap = async () => {
+		this.setState({capturing: true});
 		if (this.camera) {
 			console.log('Taking photo');
 			const options = {quality: 1, base64: false, fixOrientation: true};
 			let photoData = await this.camera.takePictureAsync(options);
-			this.setState({capturing: false, captures: [photoData, ...this.state.captures]});
-			console.log(photoData);
+			this.props.addPhoto(photoData);
+			this.setState({capturing: false});
 		}
 	};
 
@@ -62,17 +64,21 @@ class CameraComponent extends Component {
 	};
 
 	showAlert = () => {
-		Alert.alert('Please take a picture before attempting to Save PDF!')
+		Alert.alert('Warning', 'Please take a picture before attempting to Save PDF!')
 	};
 
 	render() {
-		const {hasCameraPermission, cameraType, flashMode, captures, capturing} = this.state;
+		const {hasCameraPermission, cameraType, flashMode, capturing} = this.state;
+		let numImages = this.props.captures.length;
+		console.log("Photos taken: ", numImages);
 		const activeButton = (
-			<Button style={styles.topToolbar} onPress={() => this.props.navigation.navigate('ConfirmPDF')} title={'Save PDF'}
+			<Button style={styles.topToolbar} onPress={() => this.props.navigation.navigate('ConfirmPDF')}
+			        title={'Save PDF'}
 			        accessibilityLabel={'SAVE AS PDF'}/>
 		);
 		const disabledButton = (
-			<Button onPress={() => this.showAlert()} title={'Save PDF'} disabled/>
+			<Button disabled onPress={() => this.showAlert()} title={'Save PDF'}
+			        accessibilityLabel={'This button is temporarily disabled!'}/>
 		);
 		if (hasCameraPermission === null) {
 			return <View/>
@@ -81,7 +87,7 @@ class CameraComponent extends Component {
 		} else {
 			return (
 				<React.Fragment>
-					{captures.length > 0 ? activeButton : disabledButton}
+					{numImages > 0 ? activeButton : disabledButton}
 					<View>
 						<Camera
 							style={styles.preview}
@@ -94,7 +100,7 @@ class CameraComponent extends Component {
 						/>
 					</View>
 
-					{captures.length > 0 && <Gallery captures={captures} navigation={this.props.navigation}/>}
+					{numImages > 0 && <Gallery navigation={this.props.navigation}/>}
 
 					<CameraToolbar
 						capturing={capturing}
@@ -109,4 +115,32 @@ class CameraComponent extends Component {
 	}
 }
 
-export default withNavigation(CameraComponent);
+const mapStateToProps = (state) => {
+	return {
+		captures: state.captures.captures
+	}
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		addPhoto: (photo) => {
+			dispatch(addPhoto(photo))
+		}
+	}
+};
+
+// `connect` returns a new function that accepts the component to wrap:
+const connectToStore = connect(
+	mapStateToProps,
+	mapDispatchToProps
+);
+// and that function returns the connected, wrapper component:
+const ConnectedComponent = connectToStore(CameraComponent);
+
+// We normally do both in one step, like this:
+/*connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Component);*/
+
+export default withNavigation(ConnectedComponent);
