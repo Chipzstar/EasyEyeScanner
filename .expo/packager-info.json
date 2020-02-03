@@ -2,8 +2,8 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 7520,
-  "expoServerNgrokUrl": "https://ag-n24.chipzstar.easyeyescanner.exp.direct",
-  "packagerNgrokUrl": "https://packager.ag-n24.chipzstar.easyeyescanner.exp.direct",
-  "ngrokPid": 1136
+  "packagerPid": 21404,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }
