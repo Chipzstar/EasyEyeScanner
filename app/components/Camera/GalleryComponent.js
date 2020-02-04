@@ -5,8 +5,7 @@ import {useSelector} from "react-redux";
 import styles from './styles';
 
 const GalleryComponent = ({navigation}) => {
-	const currentCaptures = useSelector(state => state.captures.captures,);
-	console.log("Gallery Component: \n", currentCaptures);
+	const currentCaptures = useSelector(state => state.captures.captures);
 	return (
 		<ScrollView
 			horizontal={true}
