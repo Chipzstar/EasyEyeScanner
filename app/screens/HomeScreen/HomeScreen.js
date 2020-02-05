@@ -56,8 +56,8 @@ class HomeScreen extends Component {
 	selectPicture = async () => {
 		const options = {
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: true,
-			aspect: [4, 3],
+			allowsEditing: false,
+			aspect: [16, 9],
 			quality: 1
 		};
 		let result = await ImagePicker.launchImageLibraryAsync(options);
@@ -99,10 +99,7 @@ class HomeScreen extends Component {
 						</Right>
 					</Header>
 
-					<Content padder
-					         style={{flex: 1}}
-					         contentContainerStyle={{flex: 1}} // important!
-					>
+					<Content padder style={{flex: 1}} contentContainerStyle={{flex: 1}} scrollEnabled={false}>
 						<FlatList
 							data={documents}
 							renderItem={({item}) => (

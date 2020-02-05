@@ -16,6 +16,9 @@
     "splash": {
       "image": "app/assets/1440x2960/splash.png",
       "resizeMode": "cover"
-    }
+    },
+    "assetBundlePatterns": [
+      "app/assets/images/*"
+    ]
   }
 }
