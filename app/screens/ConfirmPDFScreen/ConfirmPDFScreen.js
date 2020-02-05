@@ -100,7 +100,7 @@ class ConfirmPDFScreen extends Component {
 						</Body>
 					</ListItem>
 					<View style={styles.bottom}>
-						<Button large success onPress={() => this.scan()}>
+						<Button large info onPress={() => this.scan()}>
 							<Text style={{textAlign: 'center'}}>Save!</Text>
 						</Button>
 					</View>
