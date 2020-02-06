@@ -1,0 +1,20 @@
+{
+    "production": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-easyeyescanner-production-160902-authRole",
+            "UnauthRoleArn": "arn:aws:iam::271233201508:role/amplify-easyeyescanner-production-160902-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::271233201508:role/amplify-easyeyescanner-production-160902-authRole",
+            "Region": "eu-west-2",
+            "DeploymentBucketName": "amplify-easyeyescanner-production-160902-deployment",
+            "UnauthRoleName": "amplify-easyeyescanner-production-160902-unauthRole",
+            "StackName": "amplify-easyeyescanner-production-160902",
+            "StackId": "arn:aws:cloudformation:eu-west-2:271233201508:stack/amplify-easyeyescanner-production-160902/d5b07490-4831-11ea-b241-0a5f6fd32d44",
+            "AmplifyAppId": "dlkjsj17xxv1j"
+        },
+        "categories": {
+            "auth": {
+                "easyeyescanner0f59629f": {}
+            }
+        }
+    }
+}

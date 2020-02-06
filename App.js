@@ -4,10 +4,15 @@ import AppContainer from "./app/routes/router";
 import 'react-native-gesture-handler';
 import * as Font from 'expo-font';
 import {AppLoading} from "expo";
+import Predictions from '@aws-amplify/predictions'
+import Amplify from 'aws-amplify';
+import awsconfig from './aws-exports';
 import {createStore, combineReducers} from "redux";
 import {Provider} from 'react-redux'
-
 import capturesReducer from './store/reducers/capturesReducer'
+
+//Amplify.configure(awsconfig);        // Configure Amplify
+Predictions.configure(awsconfig);
 
 const rootReducer = combineReducers({
 	captures: capturesReducer
