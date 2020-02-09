@@ -7,6 +7,8 @@ import {removePhoto, replacePhoto} from "../../../store/actions/capturesAction";
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 
+import styles from "./styles";
+
 class ImagePreview extends Component {
 	constructor(props) {
 		super(props);

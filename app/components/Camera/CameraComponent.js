@@ -135,7 +135,7 @@ const connectToStore = connect(
 	mapDispatchToProps
 );
 // and that function returns the connected, wrapper component:
-const ConnectedComponent = connectToStore(CameraComponent);
+const reduxCameraComponent = connectToStore(CameraComponent);
 
 // We normally do both in one step, like this:
 /*connect(
@@ -143,4 +143,4 @@ const ConnectedComponent = connectToStore(CameraComponent);
 	mapDispatchToProps
 )(Component);*/
 
-export default withNavigation(ConnectedComponent);
+export default withNavigation(reduxCameraComponent);

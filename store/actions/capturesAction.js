@@ -1,6 +1,7 @@
 export const ADD_PHOTO = 'ADD_PHOTO';
 export const REMOVE_PHOTO = 'REMOVE_PHOTO';
 export const REPLACE_PHOTO = 'REPLACE_PHOTO';
+export const CLEAR = 'CLEAR_PHOTOS';
 
 export const addPhoto = (photo) => {
 	return {
@@ -21,6 +22,12 @@ export const replacePhoto = (oldURI, newPhoto) => {
 		type: REPLACE_PHOTO,
 		oldPhotoURI: oldURI,
 		newPhoto: newPhoto
+	}
+};
+
+export const clear = () => {
+	return {
+		type: CLEAR
 	}
 };
 

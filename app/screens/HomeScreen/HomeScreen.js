@@ -3,7 +3,12 @@ import {Container, Header, Button, Body, Title, Left, Right, Icon, Content, Fab}
 import {FlatList, StatusBar} from "react-native";
 import {Constants, Permissions} from 'react-native-unimodules';
 import * as ImagePicker from 'expo-image-picker';
+import { connect } from 'react-redux';
+import { YellowBox } from 'react-native'
 
+YellowBox.ignoreWarnings([
+	'VirtualizedLists should never be nested', // TODO: Remove when fixed
+]);
 //images
 import card_image_1 from "../../assets/images/card-image.png";
 import card_image_2 from "../../assets/images/card-image-2.png";
@@ -22,22 +27,23 @@ class HomeScreen extends Component {
 		this.state = {
 			uri: "",
 			active: false,
-			documents: [
+			/*documents: [
 				{title: "Document 1", imageURI: card_image_1},
 				{title: "Document 2", imageURI: card_image_2},
 				{title: "Document 3", imageURI: card_image_3},
+				{title: "Document 3", imageURI: card_image_3},
 			],
-			isCamera: false
+			*/isCamera: false
 		};
 	}
 
 	componentDidMount() {
 		StatusBar.setHidden(true, 'slide');
 		this.getPermissionAsync().then(res => console.log('Permission granted!', res));
-		const date = new Date().getDate();
+		const date = new Date().getDate(); //Current Day
 		const month = new Date().getMonth() + 1; //Current Month
-		const year = new Date().getFullYear();
-		this.setState({date: date + '/' + month + '/' + year});//Current Year
+		const year = new Date().getFullYear(); //Current Year
+		this.setState({date: date + '/' + month + '/' + year}); //Current Date
 	}
 
 	getPermissionAsync = async () => {
@@ -72,8 +78,9 @@ class HomeScreen extends Component {
 	};
 
 	render() {
+		console.log(this.props.documents);
 		const {navigation} = this.props;
-		let {documents} = this.state;
+		let documents = this.props.documents;
 		let {isCamera} = this.state;
 		if (isCamera) {
 			return <CameraComponent hideCamera={this.goHome.bind(this)}/>
@@ -103,7 +110,7 @@ class HomeScreen extends Component {
 						<FlatList
 							data={documents}
 							renderItem={({item}) => (
-								<DocumentScanCard name={item.title} date={this.state.date} image={item.imageURI}/>
+								<DocumentScanCard name={item.documentTitle} date={this.state.date} image={item.imageURI}/>
 							)}
 							keyExtractor={(item) => documents.indexOf(item).toString()}
 							showsVerticalScrollIndicator={false}
@@ -137,4 +144,17 @@ class HomeScreen extends Component {
 	}
 }
 
-export default HomeScreen;
+const mapStateToProps = (state) => {
+	return {
+		documents: state.documents.documents
+	}
+};
+
+// `connect` returns a new function that accepts the component to wrap:
+const connectToStore = connect(
+	mapStateToProps
+);
+
+const reduxHomeScreen = connectToStore(HomeScreen);
+
+export default reduxHomeScreen;

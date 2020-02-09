@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {Image, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
-import {Body, Button, CardItem, Icon, Left, Right, Thumbnail, Card} from "native-base";
+import React from 'react';
+import {Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Body, CardItem, Icon, Left, Right, Thumbnail, Card} from "native-base";
 import thumbnail from "../assets/images/document-thumbnail.png";
 import {withNavigation} from 'react-navigation';
 
@@ -17,7 +17,7 @@ const CardComponent = props => {
 				</Left>
 			</CardItem>
 			<CardItem cardBody>
-				<Image source={props.image} style={{height: 200, width: null, flex: 1}}/>
+				<Image source={{uri: props.image}} style={{height: 200, width: null, flex: 1}}/>
 			</CardItem>
 			<CardItem>
 				<Left>
