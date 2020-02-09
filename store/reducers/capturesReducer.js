@@ -1,4 +1,4 @@
-import {ADD_PHOTO, REMOVE_PHOTO, REPLACE_PHOTO} from "../actions/capturesAction";
+import {ADD_PHOTO, REMOVE_PHOTO, REPLACE_PHOTO, CLEAR} from "../actions/capturesAction";
 
 const initialState = {
 	captures: []
@@ -20,6 +20,8 @@ const capturesReducer = (state = initialState, action) => {
 			updatedCaptures = [...state.captures];
 			updatedCaptures.splice(index, 1, action.newPhoto);
 			return {...state, captures: updatedCaptures};
+		case CLEAR:
+			return {...state, captures: []};
 		default:
 			return state;
 	}
