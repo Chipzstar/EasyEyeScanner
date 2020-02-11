@@ -42,7 +42,7 @@ class ImagePreview extends Component {
 			[{rotate: 90}],
 			{compress: 1, format: ImageManipulator.SaveFormat.PNG}
 		);
-		console.log(result);
+		console.log('Rotated photo:', result);
 		this.props.replacePhoto(uri, result);
 		this.setState({photoData: result});
 	};

@@ -9,10 +9,6 @@ import { YellowBox } from 'react-native'
 YellowBox.ignoreWarnings([
 	'VirtualizedLists should never be nested', // TODO: Remove when fixed
 ]);
-//images
-import card_image_1 from "../../assets/images/card-image.png";
-import card_image_2 from "../../assets/images/card-image-2.png";
-import card_image_3 from "../../assets/images/card-image-3.png";
 
 //styles
 import styles from "./styles";
@@ -27,13 +23,7 @@ class HomeScreen extends Component {
 		this.state = {
 			uri: "",
 			active: false,
-			/*documents: [
-				{title: "Document 1", imageURI: card_image_1},
-				{title: "Document 2", imageURI: card_image_2},
-				{title: "Document 3", imageURI: card_image_3},
-				{title: "Document 3", imageURI: card_image_3},
-			],
-			*/isCamera: false
+			isCamera: false,
 		};
 	}
 
@@ -44,6 +34,7 @@ class HomeScreen extends Component {
 		const month = new Date().getMonth() + 1; //Current Month
 		const year = new Date().getFullYear(); //Current Year
 		this.setState({date: date + '/' + month + '/' + year}); //Current Date
+		this.setState({isCamera : this.props.navigation.state.params == null ? false : this.props.navigation.getParam('isCamera')});
 	}
 
 	getPermissionAsync = async () => {
@@ -78,7 +69,7 @@ class HomeScreen extends Component {
 	};
 
 	render() {
-		console.log(this.props.documents);
+		console.log(this.props.navigation.getParam('isCamera'));
 		const {navigation} = this.props;
 		let documents = this.props.documents;
 		let {isCamera} = this.state;

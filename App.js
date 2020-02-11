@@ -12,7 +12,7 @@ import {Provider} from 'react-redux'
 import capturesReducer from './store/reducers/capturesReducer'
 import documentsReducer from './store/reducers/documentsReducer'
 
-//Amplify.configure(awsconfig);        // Configure Amplify
+Amplify.configure(awsconfig);        // Configure Amplify
 Predictions.configure(awsconfig);
 
 const rootReducer = combineReducers({
