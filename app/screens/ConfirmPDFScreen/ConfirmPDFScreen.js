@@ -1,11 +1,10 @@
-global.Buffer = global.Buffer || require('buffer').Buffer;
-
 import React, {Component} from 'react';
 import {FlatList, Image, View, TouchableOpacity, StyleSheet} from "react-native";
 import {addDocument} from "../../../store/actions/documentsAction";
 import {clear} from "../../../store/actions/capturesAction";
 import shorthash from 'shorthash';
-import { FileSystem } from "react-native-unimodules";
+import {FileSystem} from "react-native-unimodules";
+import {Storage} from 'aws-amplify';
 import {
 	Root,
 	Container,
@@ -27,8 +26,7 @@ import {
 	Thumbnail, Icon, Left
 } from "native-base";
 import {connect} from 'react-redux';
-import { Storage } from 'aws-amplify';
-import axios from 'axios';
+
 
 class ConfirmPDFScreen extends Component {
 	constructor(props) {
@@ -39,12 +37,6 @@ class ConfirmPDFScreen extends Component {
 			access: 'private',
 			keys: []
 		};
-		const customPrefix = {
-			public: 'public/',
-			protected: 'protected/',
-			private: 'uploads/'
-		};
-		Storage.configure({level: 'private', customPrefix: customPrefix});
 	}
 
 	componentDidMount() {
@@ -54,7 +46,7 @@ class ConfirmPDFScreen extends Component {
 		let date = day + '-' + month + '-' + year;
 		this.setState({date});
 		this.setState({ImageURI: this.props.captures === undefined ? null : String(this.props.captures[0].uri)});
-		this.setState({title: `Scan - ${date}`});
+		this.setState({title: `Scan${date}`});
 	}
 
 	saveDocuments = () => {
@@ -63,7 +55,7 @@ class ConfirmPDFScreen extends Component {
 		let uri = {imageURI: this.state.ImageURI};
 		let document = Object.assign(title, uri, captures);
 		this.props.addDocument(document);
-		this.storeInS3().then(res => {
+		this.storeInS3().then(() => {
 			this.setState({success: true});
 			console.log(this.state.keys);
 			this.props.clearPhotos();
@@ -127,7 +119,7 @@ class ConfirmPDFScreen extends Component {
 							<Item>
 								<Label style={{fontWeight: 'bold'}}>Name of PDF</Label>
 								<Input
-									placeholder={`Scan - ${this.state.date}`}
+									placeholder={`Scan${this.state.date}`}
 									onChangeText={(text) => this.setState({title: text})}
 									maxLength={20}
 									value={this.state.title}/>

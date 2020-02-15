@@ -1,21 +1,21 @@
 import React, {Component} from 'react';
 import {Container, Header, Button, Body, Title, Left, Right, Icon, Content, Fab} from "native-base";
-import {FlatList, StatusBar} from "react-native";
+import {FlatList, StatusBar, Text} from "react-native";
 import {Constants, Permissions} from 'react-native-unimodules';
 import * as ImagePicker from 'expo-image-picker';
-import { connect } from 'react-redux';
-import { YellowBox } from 'react-native'
+import {connect} from 'react-redux';
+import {YellowBox} from 'react-native'
+
+//components
+import DocumentScanCard from '../../components/CardComponent';
+import CameraComponent from "../../components/Camera/CameraComponent";
 
 YellowBox.ignoreWarnings([
 	'VirtualizedLists should never be nested', // TODO: Remove when fixed
 ]);
 
-//styles
-import styles from "./styles";
-
-//components
-import DocumentScanCard from '../../components/CardComponent';
-import CameraComponent from "../../components/Camera/CameraComponent";
+//functions
+import TextIdentification from "../../functions/textExtraction";
 
 class HomeScreen extends Component {
 	constructor(props) {
@@ -34,7 +34,7 @@ class HomeScreen extends Component {
 		const month = new Date().getMonth() + 1; //Current Month
 		const year = new Date().getFullYear(); //Current Year
 		this.setState({date: date + '/' + month + '/' + year}); //Current Date
-		this.setState({isCamera : this.props.navigation.state.params == null ? false : this.props.navigation.getParam('isCamera')});
+		this.setState({isCamera: this.props.navigation.state.params == null ? false : this.props.navigation.getParam('isCamera')});
 	}
 
 	getPermissionAsync = async () => {
@@ -98,10 +98,15 @@ class HomeScreen extends Component {
 					</Header>
 
 					<Content padder style={{flex: 1}} contentContainerStyle={{flex: 1}} scrollEnabled={false}>
+						<Button large success style={{alignSelf: 'center', paddingHorizontal: 20}}
+						        onPress={() => TextIdentification()}>
+							<Text style={{fontSize: 24, textAlign: 'center'}}>Identify</Text>
+						</Button>
 						<FlatList
 							data={documents}
 							renderItem={({item}) => (
-								<DocumentScanCard name={item.documentTitle} date={this.state.date} image={item.imageURI}/>
+								<DocumentScanCard name={item.documentTitle} date={this.state.date}
+								                  image={item.imageURI}/>
 							)}
 							keyExtractor={(item) => documents.indexOf(item).toString()}
 							showsVerticalScrollIndicator={false}

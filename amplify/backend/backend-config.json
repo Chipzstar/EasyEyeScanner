@@ -1,23 +1,60 @@
 {
-	"auth": {
-		"easyeyescanner0f59629f": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": []
-		}
-	},
-	"predictions": {
-		"EasyEyeScannerIdentifyText": {
-			"providerPlugin": "awscloudformation",
-			"service": "RekognitionAndTextract",
-			"dependsOn": [],
-			"identifyType": "identifyText"
-		}
-	},
-	"storage": {
-		"EasyEyeScannerStorage": {
-			"service": "S3",
-			"providerPlugin": "awscloudformation"
-		}
-	}
+  "auth": {
+    "easyeyescanner0f59629f": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
+  },
+  "predictions": {
+    "EasyEyeScannerIdentifyText": {
+      "providerPlugin": "awscloudformation",
+      "service": "RekognitionAndTextract",
+      "dependsOn": [],
+      "identifyType": "identifyText"
+    }
+  },
+  "storage": {
+    "EasyEyeScannerStorage": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
+  },
+  "function": {
+    "easyEyeScannerLambda": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true,
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "EasyEyeScannerStorage",
+          "attributes": [
+            "BucketName"
+          ]
+        }
+      ]
+    },
+    "easyeyescanner573236fc": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true
+    }
+  },
+  "api": {
+    "easyEyeScannerAPI": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "easyeyescanner573236fc",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    }
+  }
 }
