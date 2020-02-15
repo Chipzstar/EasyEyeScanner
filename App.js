@@ -4,16 +4,19 @@ import AppContainer from "./app/routes/router";
 import 'react-native-gesture-handler';
 import * as Font from 'expo-font';
 import {AppLoading} from "expo";
-import Predictions from '@aws-amplify/predictions'
-import Amplify from 'aws-amplify';
-import awsconfig from './aws-exports';
+//Redux
 import {createStore, combineReducers} from "redux";
-import {Provider} from 'react-redux'
-import capturesReducer from './store/reducers/capturesReducer'
-import documentsReducer from './store/reducers/documentsReducer'
+import {Provider} from 'react-redux';
+//reducers
+import capturesReducer from './store/reducers/capturesReducer';
+import documentsReducer from './store/reducers/documentsReducer';
+//Amplify
+import Amplify, {Storage} from 'aws-amplify';
+import {AmazonAIPredictionsProvider} from '@aws-amplify/predictions';
+import awsconfig from './aws-exports';
 
 Amplify.configure(awsconfig);        // Configure Amplify
-Predictions.configure(awsconfig);
+Amplify.addPluggable(new AmazonAIPredictionsProvider());
 
 const rootReducer = combineReducers({
 	captures: capturesReducer,
@@ -23,12 +26,17 @@ const rootReducer = combineReducers({
 const reduxStore = createStore(rootReducer);
 
 export default class App extends Component {
-
 	constructor() {
 		super();
 		this.state = {
 			fontLoaded: false
-		}
+		};
+		const customPrefix = {
+			public: 'public/',
+			protected: 'protected/',
+			private: 'uploads/'
+		};
+		Storage.configure({level: 'private'});
 	}
 
 	async componentDidMount() {
