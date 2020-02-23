@@ -12,11 +12,9 @@ import capturesReducer from './store/reducers/capturesReducer';
 import documentsReducer from './store/reducers/documentsReducer';
 //Amplify
 import Amplify, {Storage} from 'aws-amplify';
-import {AmazonAIPredictionsProvider} from '@aws-amplify/predictions';
 import awsconfig from './aws-exports';
 
 Amplify.configure(awsconfig);        // Configure Amplify
-Amplify.addPluggable(new AmazonAIPredictionsProvider());
 
 const rootReducer = combineReducers({
 	captures: capturesReducer,
