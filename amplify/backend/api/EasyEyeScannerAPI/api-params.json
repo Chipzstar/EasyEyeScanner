@@ -1,0 +1,48 @@
+{
+    "paths": [
+        {
+            "name": "/scan",
+            "lambdaFunction": "EasyEyeScannerFunction",
+            "privacy": {
+                "protected": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ],
+                "unauth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH"
+                ]
+            }
+        }
+    ],
+    "resourceName": "EasyEyeScannerAPI",
+    "apiName": "EasyEyeScannerAPI",
+    "functionArns": [
+        {
+            "lambdaFunction": "EasyEyeScannerFunction"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 1,
+        "authRoleName": "amplify-easyeyescanner-production-160902-authRole",
+        "unAuthRoleName": "amplify-easyeyescanner-production-160902-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "EasyEyeScannerFunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "6ec3b6e8"
+}
