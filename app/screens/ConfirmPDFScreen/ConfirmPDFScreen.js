@@ -27,6 +27,8 @@ import {
 } from "native-base";
 import {connect} from 'react-redux';
 
+//functions
+import GeneratePDF from "../../functions/generatePDF";
 
 class ConfirmPDFScreen extends Component {
 	constructor(props) {
@@ -40,13 +42,18 @@ class ConfirmPDFScreen extends Component {
 	}
 
 	componentDidMount() {
-		const day = new Date().getDate();
-		const month = new Date().getMonth() + 1; //Current Month
+		const day = ("0" + new Date().getDate()).slice(-2);
+		const month = ("0" + (new Date().getMonth() + 1)).slice(-2);
 		const year = new Date().getFullYear();
+		const hours = ("0" + new Date().getHours()).slice(-2);
+		const minutes = ("0" + new Date().getMinutes()).slice(-2);
+		const seconds = ("0" + new Date().getSeconds()).slice(-2);
 		let date = day + '-' + month + '-' + year;
-		this.setState({date});
+		let time = hours + ':' + minutes + ':' + seconds;
+		console.log(new Date().toTimeString());
+		this.setState({date, time});
 		this.setState({ImageURI: this.props.captures === undefined ? null : String(this.props.captures[0].uri)});
-		this.setState({title: `Scan${date}`});
+		this.setState({title: `${date}/${time}`});
 	}
 
 	saveDocuments = () => {
@@ -55,11 +62,13 @@ class ConfirmPDFScreen extends Component {
 		let uri = {imageURI: this.state.ImageURI};
 		let document = Object.assign(title, uri, captures);
 		this.props.addDocument(document);
-		this.storeInS3().then(() => {
+		this.storeInS3().then(async () => {
 			this.setState({success: true});
 			console.log(this.state.keys);
+			await GeneratePDF(this.state.title);
 			this.props.clearPhotos();
-			this.props.navigation.navigate('Home', {isCamera: false});
+			this.props.navigation.state.params.hideCamera();
+			this.props.navigation.pop();
 		});
 	};
 

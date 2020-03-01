@@ -2,8 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 1660,
-  "expoServerNgrokUrl": "https://tj-4c5.chipzstar.easyeyescanner.exp.direct",
-  "packagerNgrokUrl": "https://packager.tj-4c5.chipzstar.easyeyescanner.exp.direct",
-  "ngrokPid": 4764
+  "packagerPid": 2628,
+  "expoServerNgrokUrl": "https://fc-fkk.chipzstar.easyeyescanner.exp.direct",
+  "packagerNgrokUrl": "https://packager.fc-fkk.chipzstar.easyeyescanner.exp.direct",
+  "ngrokPid": 6856,
+  "webpackServerPort": 19006
 }

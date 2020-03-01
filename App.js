@@ -14,7 +14,7 @@ import documentsReducer from './store/reducers/documentsReducer';
 import Amplify, {Storage} from 'aws-amplify';
 import awsconfig from './aws-exports';
 
-Amplify.configure(awsconfig);        // Configure Amplify
+Amplify.configure(awsconfig); // Configure Amplify
 
 const rootReducer = combineReducers({
 	captures: capturesReducer,
