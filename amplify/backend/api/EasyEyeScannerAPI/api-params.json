@@ -29,8 +29,8 @@
         }
     ],
     "privacy": {
-        "auth": 1,
-        "unauth": 1,
+        "auth": 2,
+        "unauth": 2,
         "authRoleName": "amplify-easyeyescanner-production-160902-authRole",
         "unAuthRoleName": "amplify-easyeyescanner-production-160902-unauthRole"
     },
@@ -44,5 +44,5 @@
             ]
         }
     ],
-    "uuid": "6ec3b6e8"
+    "uuid": "f98d9cd1"
 }

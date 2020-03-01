@@ -70,7 +70,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-easyeyescanner-production-160902-deployment",
-					"S3Key": "amplify-builds/EasyEyeScannerFunction-646c6939544344637239-build.zip"
+					"S3Key": "amplify-builds/EasyEyeScannerFunction-6f373034497444363368-build.zip"
 				}
 			}
 		},

@@ -34,7 +34,6 @@ class HomeScreen extends Component {
 		const month = new Date().getMonth() + 1; //Current Month
 		const year = new Date().getFullYear(); //Current Year
 		this.setState({date: date + '/' + month + '/' + year}); //Current Date
-		this.setState({isCamera: this.props.navigation.state.params == null ? false : this.props.navigation.getParam('isCamera')});
 	}
 
 	getPermissionAsync = async () => {
@@ -69,10 +68,9 @@ class HomeScreen extends Component {
 	};
 
 	render() {
-		console.log(this.props.navigation.getParam('isCamera'));
 		const {navigation} = this.props;
-		let documents = this.props.documents;
 		let {isCamera} = this.state;
+		let {documents} = this.props;
 		if (isCamera) {
 			return <CameraComponent hideCamera={this.goHome.bind(this)}/>
 		} else {
@@ -100,13 +98,12 @@ class HomeScreen extends Component {
 					<Content padder style={{flex: 1}} contentContainerStyle={{flex: 1}} scrollEnabled={false}>
 						<Button large success style={{alignSelf: 'center', paddingHorizontal: 20}}
 						        onPress={() => TextIdentification()}>
-							<Text style={{fontSize: 24, textAlign: 'center'}}>Identify</Text>
+							<Text style={{fontSize: 24, textAlign: 'center'}}>Test API</Text>
 						</Button>
 						<FlatList
 							data={documents}
 							renderItem={({item}) => (
-								<DocumentScanCard name={item.documentTitle} date={this.state.date}
-								                  image={item.imageURI}/>
+								<DocumentScanCard name={item.documentTitle} date={this.state.date} image={item.imageURI}/>
 							)}
 							keyExtractor={(item) => documents.indexOf(item).toString()}
 							showsVerticalScrollIndicator={false}

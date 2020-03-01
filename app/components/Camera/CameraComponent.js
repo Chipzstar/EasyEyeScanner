@@ -72,7 +72,7 @@ class CameraComponent extends Component {
 		let numImages = this.props.captures.length;
 		console.log("Photos taken: ", numImages);
 		const activeButton = (
-			<Button style={styles.topToolbar} onPress={() => this.props.navigation.navigate('ConfirmPDF')}
+			<Button style={styles.topToolbar} onPress={() => this.props.navigation.navigate('ConfirmPDF', {hideCamera: this.props.hideCamera})}
 			        title={'Save PDF'}
 			        accessibilityLabel={'SAVE AS PDF'}/>
 		);
