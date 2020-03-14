@@ -14,12 +14,18 @@ export default ({
 	                flashMode = CameraFlashModes.off,
 	                setFlashMode, setCameraType, onCapture
                 }) => (
-	<Grid style={styles.bottomToolbar}>
+	<Grid
+		accessibilityLabel={"Camera Toolbar"}
+		accessibilityRole={"toolbar"}
+		style={styles.bottomToolbar}>
 		<Row>
 			<Col style={styles.alignCenter}>
-				<TouchableOpacity onPress={() => setFlashMode(
-					flashMode === CameraFlashModes.on ? CameraFlashModes.off : CameraFlashModes.on
-				)}>
+				<TouchableOpacity
+					accessibilityLabel={"Toggle Camera Flash"}
+					accessibilityRole={"imagebutton"}
+					onPress={() => setFlashMode(
+						flashMode === CameraFlashModes.on ? CameraFlashModes.off : CameraFlashModes.on
+					)}>
 					<Ionicons
 						name={flashMode === CameraFlashModes.on ? "md-flash" : 'md-flash-off'}
 						color="white"
@@ -29,6 +35,8 @@ export default ({
 			</Col>
 			<Col size={2} style={styles.alignCenter}>
 				<TouchableWithoutFeedback
+					accessibilityLabel={"Take Picture"}
+					accessibilityRole={"imagebutton"}
 					onPress={onCapture}>
 					<View style={[styles.captureBtn, capturing && styles.captureBtnActive]}>
 						{capturing && <View style={styles.captureBtnInternal}/>}
@@ -36,9 +44,13 @@ export default ({
 				</TouchableWithoutFeedback>
 			</Col>
 			<Col style={styles.alignCenter}>
-				<TouchableOpacity onPress={() => setCameraType(
-					cameraType === CameraTypes.back ? CameraTypes.front : CameraTypes.back
-				)}>
+				<TouchableOpacity
+					accessibilityLabel={"switch camera"}
+					accessibilityHint={"switches between rear and front camera"}
+					accessibilityRole={"imagebutton"}
+					onPress={() => setCameraType(
+						cameraType === CameraTypes.back ? CameraTypes.front : CameraTypes.back
+					)}>
 					<Ionicons
 						name="md-reverse-camera"
 						color="white"

@@ -81,6 +81,9 @@ class HomeScreen extends Component {
 							<Button
 								transparent
 								onPress={() => navigation.openDrawer()}
+								accessibilityLabel={"Side Menu"}
+								accessibilityHint={"Opens the side menu drawer"}
+								accessibilityRole={"button"}
 							>
 								<Icon name='menu'/>
 							</Button>
@@ -89,13 +92,22 @@ class HomeScreen extends Component {
 							<Title>My Scans</Title>
 						</Body>
 						<Right>
-							<Button transparent>
+							<Button
+								transparent
+								accessibilityLabel={"Options"}
+								accessibilityHint={"Click to see more options"}
+							>
 								<Icon name='more'/>
 							</Button>
 						</Right>
 					</Header>
 
-					<Content padder style={{flex: 1}} contentContainerStyle={{flex: 1}} scrollEnabled={false}>
+					<Content
+						padder
+						style={{flex: 1}}
+						contentContainerStyle={{flex: 1}}
+						scrollEnabled={false}
+					>
 						<Button large success style={{alignSelf: 'center', paddingHorizontal: 20}}
 						        onPress={() => TextIdentification()}>
 							<Text style={{fontSize: 24, textAlign: 'center'}}>Test API</Text>
@@ -103,7 +115,10 @@ class HomeScreen extends Component {
 						<FlatList
 							data={documents}
 							renderItem={({item}) => (
-								<DocumentScanCard name={item.documentTitle} date={this.state.date} image={item.imageURI}/>
+								<DocumentScanCard
+									name={item.documentTitle}
+									date={this.state.date}
+									image={item.imageURI}/>
 							)}
 							keyExtractor={(item) => documents.indexOf(item).toString()}
 							showsVerticalScrollIndicator={false}
@@ -116,17 +131,22 @@ class HomeScreen extends Component {
 						containerStyle={{}}
 						style={{backgroundColor: '#5067FF'}}
 						position="bottomRight"
-						onPress={() => this.setState({active: !this.state.active})}>
+						onPress={() => this.setState({active: !this.state.active})}
+					>
 						<Icon name="add"/>
 						<Button
 							style={{backgroundColor: '#3673a3'}}
 							onPress={() => this.takePicture()}
+							accessibilityLabel={"Camera"}
+							accessibilityHint={"Fab button to start taking photos with camera"}
 						>
 							<Icon name="camera"/>
 						</Button>
 						<Button
 							style={{backgroundColor: '#3673a3'}}
 							onPress={() => this.selectPicture()}
+							accessibilityLabel={"Image Gallery"}
+							accessibilityHint={"Fab button to open your image gallery"}
 						>
 							<Icon name="image"/>
 						</Button>

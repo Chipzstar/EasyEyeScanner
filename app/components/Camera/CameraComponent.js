@@ -70,15 +70,24 @@ class CameraComponent extends Component {
 	render() {
 		const {hasCameraPermission, cameraType, flashMode, capturing} = this.state;
 		let numImages = this.props.captures.length;
-		console.log("Photos taken: ", numImages);
 		const activeButton = (
-			<Button style={styles.topToolbar} onPress={() => this.props.navigation.navigate('ConfirmPDF', {hideCamera: this.props.hideCamera})}
-			        title={'Save PDF'}
-			        accessibilityLabel={'SAVE AS PDF'}/>
+			<Button
+				style={styles.topToolbar}
+				onPress={() => this.props.navigation.navigate('ConfirmPDF', {hideCamera: this.props.hideCamera})}
+			    title={'CONFIRM'}
+			    accessibilityHint={'button to confirm the selected images'}
+				accessibilityLabel={"Confirm"}
+				accessibilityRole={"button"}
+			/>
 		);
 		const disabledButton = (
-			<Button disabled onPress={() => this.showAlert()} title={'Save PDF'}
-			        accessibilityLabel={'This button is temporarily disabled!'}/>
+			<Button
+				disabled
+			    onPress={() => this.showAlert()}
+			    title={'CONFIRM'}
+				accessibilityRole={"button"}
+				accessibilityState={{"disabled": true}}
+			/>
 		);
 		if (hasCameraPermission === null) {
 			return <View/>

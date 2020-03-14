@@ -12,12 +12,17 @@ const GalleryComponent = ({navigation}) => {
 			style={[styles.bottomToolbar, styles.galleryContainer]}
 		>
 			{currentCaptures.map(({uri, height, width}) => (
-				<TouchableOpacity style={styles.galleryImageContainer} key={uri}
-				                  onPress={() => navigation.navigate('ImagePreview', {
-					                  uri: uri,
-					                  width: width,
-					                  height: height
-				                  })}>
+				<TouchableOpacity
+					accessibilityLabel={"Image capture thumbnail"}
+					accessibilityHint={"Click to show full screen preview of image"}
+					accessibilityRole={"imagebutton"}
+					style={styles.galleryImageContainer}
+					key={uri}
+					onPress={() => navigation.navigate('ImagePreview', {
+						uri: uri,
+						width: width,
+						height: height
+					})}>
 					<Image source={{uri}} style={styles.galleryImage}/>
 				</TouchableOpacity>
 			))}
