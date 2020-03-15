@@ -67,7 +67,11 @@ class ImagePreview extends Component {
 			<Container>
 				<Header>
 					<Left style={{flex: 1}}>
-						<Button transparent onPress={() => this.props.navigation.goBack()}>
+						<Button
+							accessibilityLabel={"Back button"}
+							accessibilityHint={"Go back to previous screen"}
+							transparent
+							onPress={() => this.props.navigation.goBack()}>
 							<Icon name="arrow-back"/>
 						</Button>
 					</Left>
@@ -80,12 +84,17 @@ class ImagePreview extends Component {
 					</Button>*/}
 				</Header>
 				<Content scrollEnabled>
-					<Image source={{uri: photoData.uri}}
-					       style={{flex: 1, justifyContent: 'center', alignItems: 'center', aspectRatio: 0.5}}
-					       resizeMode="contain"/>
+					<Image
+						accessibilityLabel={"Image Preview"}
+						source={{uri: photoData.uri}}
+					    style={{flex: 1, justifyContent: 'center', alignItems: 'center', aspectRatio: 0.5}}
+					    resizeMode="contain"/>
 				</Content>
 				<Footer>
-					<FooterTab>
+					<FooterTab
+						accessibilityLabel={"Image Options"}
+						accessibilityRole={"toolbar"}
+					>
 						<Button vertical onPress={() => this.replacePhoto(photoData.uri)}>
 							<MaterialCommunityIcons name={"file-replace"} size={28} color={'white'}/>
 							<Text style={styles.iconText}>Replace</Text>
@@ -94,8 +103,7 @@ class ImagePreview extends Component {
 							<MaterialIcons name={'rotate-right'} size={28} color={'white'}/>
 							<Text style={styles.iconText}>Rotate</Text>
 						</Button>
-						<Button vertical
-						        onPress={() => this.flipPhoto(photoData.uri, photoData.width, photoData.height)}>
+						<Button vertical onPress={() => this.flipPhoto(photoData.uri, photoData.width, photoData.height)}>
 							<MaterialIcons name={"flip"} color={'white'} size={28}/>
 							<Text style={styles.iconText}>Flip</Text>
 						</Button>

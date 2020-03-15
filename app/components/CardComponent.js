@@ -7,7 +7,10 @@ import {withNavigation} from 'react-navigation';
 const CardComponent = props => {
 	return (
 		<Card>
-			<CardItem>
+			<CardItem
+				accessibilityLabel={"Document Details"}
+			    accessibilityHint={"Contains the name and date of when the document was taken"}
+			>
 				<Left>
 					<Thumbnail source={thumbnail}/>
 					<Body>
@@ -16,18 +19,32 @@ const CardComponent = props => {
 					</Body>
 				</Left>
 			</CardItem>
-			<CardItem cardBody>
+			<CardItem
+				accessibilityLabel={"Document Image"}
+				accessibilityHint={"Shows preview of the first page of the document"}
+				cardBody>
 				<Image source={{uri: props.image}} style={{height: 200, width: null, flex: 1}}/>
 			</CardItem>
-			<CardItem>
+			<CardItem
+				accessibilityLabel={"Options"}
+				accessibilityRole={"toolbar"}
+			>
 				<Left>
-					<TouchableOpacity style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+					<TouchableOpacity
+						accessibilityLabel={"Share"}
+						accessibilityHint={"Social media share"}
+						accessibilityRole={"button"}
+						style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
 						<Icon name={"share"}/>
 						<Text style={styles.iconText}>Share</Text>
 					</TouchableOpacity>
 				</Left>
 				<Body>
-					<TouchableOpacity style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+					<TouchableOpacity
+						accessibilityLabel={"Read"}
+						accessibilityHint={"Opens the document in screen reader"}
+						accessibilityRole={"button"}
+						style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
 						<Icon name={"book"}/>
 						<Text style={styles.iconText}>Read</Text>
 					</TouchableOpacity>

@@ -8,7 +8,7 @@ export default function TextIdentification() {
 	let path = '/scan/getText';
 	let myInit = { // OPTIONAL
 		body: {
-			message: "Testing..."
+			key: "private/eu-west-2:1bbd817b-6d01-4f56-b903-0ea8a7598256/05-03-2020/15:00:00/Billing Management Console.txt"
 		}, // replace this with attributes you need
 		headers: {
 			'Content-Type': "application/json",
