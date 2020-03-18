@@ -4,6 +4,9 @@ import {Body, CardItem, Icon, Left, Right, Thumbnail, Card} from "native-base";
 import thumbnail from "../assets/images/document-thumbnail.png";
 import {withNavigation} from 'react-navigation';
 
+//functions
+import TextIdentification from "../functions/textExtraction";
+
 const CardComponent = props => {
 	return (
 		<Card>

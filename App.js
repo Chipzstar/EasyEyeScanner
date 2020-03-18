@@ -1,27 +1,35 @@
+//Main Imports
 import React, {Component} from 'react';
 import {Root} from "native-base";
 import AppContainer from "./app/routes/router";
 import 'react-native-gesture-handler';
 import * as Font from 'expo-font';
 import {AppLoading} from "expo";
+import {ActivityIndicator, AsyncStorage} from 'react-native'
 //Redux
-import {createStore, combineReducers} from "redux";
+import {createStore, applyMiddleware} from "redux";
 import {Provider} from 'react-redux';
+import {persistStore, persistReducer} from 'redux-persist'
+import { PersistGate } from "redux-persist/es/integration/react";
+import {createLogger} from 'redux-logger';
 //reducers
-import capturesReducer from './store/reducers/capturesReducer';
-import documentsReducer from './store/reducers/documentsReducer';
+import rootReducer from './store/index';
 //Amplify
 import Amplify, {Storage} from 'aws-amplify';
 import awsconfig from './aws-exports';
 
 Amplify.configure(awsconfig); // Configure Amplify
 
-const rootReducer = combineReducers({
-	captures: capturesReducer,
-	documents: documentsReducer
-});
+const persistConfig = {
+	key: "root",
+	storage: AsyncStorage
+};
 
-const reduxStore = createStore(rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const reduxStore = createStore(persistedReducer, applyMiddleware(createLogger()));
+
+const persistedStore = persistStore(reduxStore);
 
 export default class App extends Component {
 	constructor() {
@@ -53,6 +61,14 @@ export default class App extends Component {
 		this.setState({fontLoaded: true})
 	}
 
+	renderLoading = () => {
+		return (
+			<Root>
+				<ActivityIndicator size={"large"} />
+			</Root>
+		);
+	};
+
 	render() {
 		if (!this.state.fontLoaded) {
 			return (
@@ -63,7 +79,9 @@ export default class App extends Component {
 		}
 		return (
 			<Provider store={reduxStore}>
-				<AppContainer/>
+				<PersistGate persistor={persistedStore} loading={this.renderLoading()}>
+					<AppContainer/>
+				</PersistGate>
 			</Provider>
 		);
 	}

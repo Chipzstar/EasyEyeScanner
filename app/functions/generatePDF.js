@@ -22,7 +22,8 @@ export default async function GeneratePDF(pdfName) {
 			response: true// OPTIONAL
 		};
 		console.log('Making Api request...');
-		API.post(apiName, path, myInit).then(res => console.log(res.data)).catch(err => console.error(err));
+		let result = await API.post(apiName, path, myInit);
+		console.log(result.data);
 	} catch (err) {
 		console.error(err);
 	}

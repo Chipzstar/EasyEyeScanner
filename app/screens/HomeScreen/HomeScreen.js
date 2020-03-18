@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Container, Header, Button, Body, Title, Left, Right, Icon, Content, Fab} from "native-base";
-import {FlatList, StatusBar, Text} from "react-native";
+import {AsyncStorage, FlatList, StatusBar, Text} from "react-native";
 import {Constants, Permissions} from 'react-native-unimodules';
 import * as ImagePicker from 'expo-image-picker';
 import {connect} from 'react-redux';
@@ -9,13 +9,11 @@ import {YellowBox} from 'react-native'
 //components
 import DocumentScanCard from '../../components/CardComponent';
 import CameraComponent from "../../components/Camera/CameraComponent";
+import ImageBrowserComponent from "../../components/ImageGallery/ImageBrowserComponent";
 
 YellowBox.ignoreWarnings([
 	'VirtualizedLists should never be nested', // TODO: Remove when fixed
 ]);
-
-//functions
-import TextIdentification from "../../functions/textExtraction";
 
 class HomeScreen extends Component {
 	constructor(props) {
@@ -24,16 +22,18 @@ class HomeScreen extends Component {
 			uri: "",
 			active: false,
 			isCamera: false,
+			isImageGallery: false
 		};
 	}
 
 	componentDidMount() {
 		StatusBar.setHidden(true, 'slide');
-		this.getPermissionAsync().then(res => console.log('Permission granted!', res));
+		this.getPermissionAsync().then(() => console.log('Permission granted!'));
 		const date = new Date().getDate(); //Current Day
 		const month = new Date().getMonth() + 1; //Current Month
 		const year = new Date().getFullYear(); //Current Year
-		this.setState({date: date + '/' + month + '/' + year}); //Current Date
+		this.setState({date: date + '/' + month + '/' + year});
+		this._retrieveData().then(res => console.log(res));//Current Date
 	}
 
 	getPermissionAsync = async () => {
@@ -50,29 +50,29 @@ class HomeScreen extends Component {
 	}
 
 	selectPicture = async () => {
-		const options = {
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: false,
-			aspect: [16, 9],
-			quality: 1
-		};
-		let result = await ImagePicker.launchImageLibraryAsync(options);
-
-		if (!result.cancelled) {
-			this.setState({uri: result.uri});
-		}
+		this.setState({isImageGallery: true});
 	};
 
 	goHome = () => {
-		this.setState({isCamera: false})
+		this.setState({isCamera: false, isImageGallery: false})
+	};
+
+	_retrieveData = async () => {
+		try {
+			return JSON.parse(await AsyncStorage.getItem("persist:root"));
+		} catch (err) {
+			throw err;
+		}
 	};
 
 	render() {
 		const {navigation} = this.props;
-		let {isCamera} = this.state;
+		let {isCamera, isImageGallery} = this.state;
 		let {documents} = this.props;
 		if (isCamera) {
 			return <CameraComponent hideCamera={this.goHome.bind(this)}/>
+		} else if (isImageGallery) {
+			return <ImageBrowserComponent hideImageExplorer={this.goHome.bind(this)}/>
 		} else {
 			return (
 				<Container>
@@ -108,10 +108,6 @@ class HomeScreen extends Component {
 						contentContainerStyle={{flex: 1}}
 						scrollEnabled={false}
 					>
-						<Button large success style={{alignSelf: 'center', paddingHorizontal: 20}}
-						        onPress={() => TextIdentification()}>
-							<Text style={{fontSize: 24, textAlign: 'center'}}>Test API</Text>
-						</Button>
 						<FlatList
 							data={documents}
 							renderItem={({item}) => (

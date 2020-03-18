@@ -111,107 +111,96 @@ class ConfirmPDFScreen extends Component {
 	render() {
 		let {saveToGallery} = this.state;
 		return (
-			<Root>
-				<Container>
-					<Header>
-						<Left style={{flex: 1}}>
-							<Button
-								accessibilityLabel={'Back button'}
-								accessibilityHint={'Go back to previous screen'}
-								transparent
-								onPress={() => this.props.navigation.goBack()}>
-								<Icon name="arrow-back"/>
-							</Button>
-						</Left>
+			<Container>
+				<Header>
+					<Left style={{flex: 1}}>
+						<Button
+							accessibilityLabel={'Back button'}
+							accessibilityHint={'Go back to previous screen'}
+							transparent
+							onPress={() => this.props.navigation.goBack()}>
+							<Icon name="arrow-back"/>
+						</Button>
+					</Left>
+					<Body>
+						<Title accessibilityLabel={"Review PDF"} accessibilityRole={"header"}>
+							Review PDF
+						</Title>
+					</Body>
+					<Right/>
+				</Header>
+				<Content contentContainerStyle={{flexGrow: 1}}>
+					<Form>
+						<Item>
+							<Label style={{fontWeight: 'bold'}}>Name of PDF</Label>
+							<Input
+								accessibilityLabel={'Name of Document'}
+								accessibilityHint={'Input field for naming the image collection'}
+								placeholder={`Scan${this.state.date}`}
+								onChangeText={(text) => this.setState({title: text})}
+								maxLength={20}
+								value={this.state.title}/>
+						</Item>
+					</Form>
+					<Separator bordered>
+						<Text style={styles.subtitle}>Images</Text>
+					</Separator>
+					<ListItem>
+						<FlatList
+							keyExtractor={(item) => this.props.captures.indexOf(item).toString()}
+							accessibilityLabel={"captured photos"}
+							accessibilityHint={"horizontal scroll view of all selected photos"}
+							horizontal={true}
+							showsHorizontalScrollIndicator={false}
+							data={this.props.captures}
+							renderItem={({item}) => (
+								<TouchableOpacity
+									style={styles.thumbnail}
+									onPress={() => this.setState({uri: item.uri})}
+									accessibilityLabel={'captured image'}
+									accessibilityHint={'a snapshot of a captured image'}
+									accessibilityRole={"imagebutton"}
+								>
+									<Thumbnail square large source={{uri: item.uri}}/>
+								</TouchableOpacity>
+							)}
+						/>
+					</ListItem>
+					<Separator bordered>
+						<Text style={styles.subtitle}>Preview</Text>
+					</Separator>
+					<ListItem
+						accessibilityLabel={"Image Preview"}
+						style={{
+							flex: 1,
+							alignItems: 'center',
+							alignSelf: 'center'
+						}}>
+						{this.state.uri &&
+						<Image source={{uri: this.state.uri}} style={{width: 250, height: 250}}/>}
+					</ListItem>
+					<Separator bordered>
+						<Text style={styles.subtitle}>Options</Text>
+					</Separator>
+					<ListItem>
+						<CheckBox
+							checked={saveToGallery}
+							onPress={() => this.setState({saveToGallery: !saveToGallery})}/>
 						<Body>
-							<Title accessibilityLabel={"Review PDF"} accessibilityRole={"header"}>
-								Review PDF
-							</Title>
+							<Text>Save PDF to Gallery</Text>
 						</Body>
-						<Right/>
-					</Header>
-					<Content contentContainerStyle={{flexGrow: 1}}>
-						<Form>
-							<Item>
-								<Label style={{fontWeight: 'bold'}}>Name of PDF</Label>
-								<Input
-									accessibilityLabel={'Name of Document'}
-									accessibilityHint={'Input field for naming the image collection'}
-									placeholder={`Scan${this.state.date}`}
-									onChangeText={(text) => this.setState({title: text})}
-									maxLength={20}
-									value={this.state.title}/>
-							</Item>
-						</Form>
-						<Separator bordered>
-							<Text style={styles.subtitle}>Images</Text>
-						</Separator>
-						<ListItem>
-							<FlatList
-								keyExtractor={(item) => this.props.captures.indexOf(item).toString()}
-								accessibilityLabel={"captured photos"}
-								accessibilityHint={"horizontal scroll view of all selected photos"}
-								horizontal={true}
-								showsHorizontalScrollIndicator={false}
-								data={this.props.captures}
-								renderItem={({item}) => (
-									<TouchableOpacity
-										style={styles.thumbnail}
-										onPress={() => this.setState({uri: item.uri})}
-										accessibilityLabel={'captured image'}
-										accessibilityHint={'a snapshot of a captured image'}
-										accessibilityRole={"imagebutton"}
-									>
-										<Thumbnail square large source={{uri: item.uri}}/>
-									</TouchableOpacity>
-								)}
-							/>
-						</ListItem>
-						<Separator bordered>
-							<Text style={styles.subtitle}>Preview</Text>
-						</Separator>
-						<ListItem
-							accessibilityLabel={"Image Preview"}
-							style={{
-								flex: 1,
-								alignItems: 'center',
-								alignSelf: 'center'
-							}}>
-							{this.state.uri &&
-							<Image source={{uri: this.state.uri}} style={{width: 250, height: 250}}/>}
-						</ListItem>
-						<Separator bordered>
-							<Text style={styles.subtitle}>Options</Text>
-						</Separator>
-						<ListItem>
-							<CheckBox
-								checked={saveToGallery}
-								onPress={() => this.setState({saveToGallery: !saveToGallery})}/>
-							<Body>
-								<Text>Save PDF to Gallery</Text>
-							</Body>
-						</ListItem>
-						<View style={styles.bottom}>
-							<Button
-								accessibilityLabel={"Save Document"}
-								accessibilityHint={"Saves all captured images into one PDF document"}
-								large info
-								onPress={() => {
-									this.saveDocuments();
-									Toast.show({
-										text: "Document saved successfully!",
-										textStyle: {color: "yellow", fontSize: 18},
-										position: 'bottom',
-										buttonText: "Okay",
-										duration: 5
-									});
-								}}>
-								<Text style={{textAlign: 'center'}}>Save!</Text>
-							</Button>
-						</View>
-					</Content>
-				</Container>
-			</Root>
+					</ListItem>
+					<View style={styles.bottom}>
+						<Button
+							accessibilityLabel={"Save Document"}
+							accessibilityHint={"Saves all captured images into one PDF document"}
+							large info
+							onPress={() => this.saveDocuments()}>
+							<Text style={{textAlign: 'center'}}>Save!</Text>
+						</Button>
+					</View>
+				</Content>
+			</Container>
 		)
 	}
 }
