@@ -5,9 +5,9 @@ import thumbnail from "../assets/images/document-thumbnail.png";
 import {withNavigation} from 'react-navigation';
 
 //functions
-import TextIdentification from "../functions/textExtraction";
 
 const CardComponent = props => {
+	console.log("Document ID: ", props.id);
 	return (
 		<Card>
 			<CardItem
@@ -47,7 +47,9 @@ const CardComponent = props => {
 						accessibilityLabel={"Read"}
 						accessibilityHint={"Opens the document in screen reader"}
 						accessibilityRole={"button"}
-						style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+						style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}
+						onPress={() => props.navigation.navigate('ReaderScreen', {documentID: props.id})}
+					>
 						<Icon name={"book"}/>
 						<Text style={styles.iconText}>Read</Text>
 					</TouchableOpacity>

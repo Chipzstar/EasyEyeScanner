@@ -11,12 +11,15 @@ const documentsReducer = (state = initialState, action) => {
 		case ADD_DOCUMENT:
 			return {...state, documents: state.documents.concat(action.document)};
 		case UPDATE_DOCUMENT:
-			index = state.documents.findIndex(docObj => docObj.uri === action.docURI);
+			index = state.documents.findIndex(docObj => docObj.imageURI === action.documentId);
+			updatedDocuments = [...state.documents];
+			updatedDocuments.splice(index, 1, action.newDocument);
+			return {...state, documents: updatedDocuments};
+		case REMOVE_DOCUMENT:
+			index = state.documents.findIndex(docObj => docObj.imageURI === action.documentId);
 			updatedDocuments = [...state.documents];
 			updatedDocuments.splice(index, 1);
-			return {...state, captures: updatedDocuments};
-		case REMOVE_DOCUMENT:
-			break;
+			return {...state, documents: updatedDocuments};
 		default:
 			return state;
 	}

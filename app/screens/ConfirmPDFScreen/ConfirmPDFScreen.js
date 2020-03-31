@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import {FlatList, Image, View, TouchableOpacity, StyleSheet} from "react-native";
-import {addDocument} from "../../../store/actions/documentsAction";
+import {addDocument, updateDocument} from "../../../store/actions/documentsAction";
 import {clear} from "../../../store/actions/capturesAction";
 import shorthash from 'shorthash';
 import {FileSystem} from "react-native-unimodules";
 import {Storage} from 'aws-amplify';
 import {
-	Root,
 	Container,
 	Content,
 	Header,
@@ -21,7 +20,6 @@ import {
 	Right,
 	Title,
 	Text,
-	Toast,
 	Button,
 	Thumbnail, Icon, Left
 } from "native-base";
@@ -65,7 +63,10 @@ class ConfirmPDFScreen extends Component {
 		this.storeInS3().then(() => {
 			this.setState({success: true});
 			console.log(this.state.keys);
-			GeneratePDF(this.state.title).then(() => {
+			GeneratePDF(this.state.title).then((res) => {
+				console.log(res);
+				let newDocument = Object.assign(document, res);
+				this.props.updateDocument(this.state.ImageURI, newDocument);
 				this.props.clearPhotos();
 				this.props.navigation.state.params.hideCamera();
 				this.props.navigation.pop();
@@ -216,6 +217,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		addDocument: (document) => {
 			dispatch(addDocument(document))
+		},
+		updateDocument: (imageURI, newDocument) => {
+			dispatch(updateDocument(imageURI, newDocument))
 		},
 		clearPhotos: () => {
 			dispatch(clear())

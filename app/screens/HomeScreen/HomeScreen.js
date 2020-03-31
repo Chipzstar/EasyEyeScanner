@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {Container, Header, Button, Body, Title, Left, Right, Icon, Content, Fab} from "native-base";
 import {AsyncStorage, FlatList, StatusBar, Text} from "react-native";
 import {Constants, Permissions} from 'react-native-unimodules';
-import * as ImagePicker from 'expo-image-picker';
 import {connect} from 'react-redux';
-import {YellowBox} from 'react-native'
+import {YellowBox} from 'react-native';
+import PopUpMenu from "../../components/PopUpMenu";
+import { RESET_ACTION } from "../../../store";
 
 //components
 import DocumentScanCard from '../../components/CardComponent';
@@ -33,7 +34,10 @@ class HomeScreen extends Component {
 		const month = new Date().getMonth() + 1; //Current Month
 		const year = new Date().getFullYear(); //Current Year
 		this.setState({date: date + '/' + month + '/' + year});
-		this._retrieveData().then(res => console.log(res));//Current Date
+		this._retrieveData().then(res => {
+			console.log(res);
+			if (res.documents.documents) console.log(JSON.parse(res.documents))
+		});//Current Date
 	}
 
 	getPermissionAsync = async () => {
@@ -55,6 +59,11 @@ class HomeScreen extends Component {
 
 	goHome = () => {
 		this.setState({isCamera: false, isImageGallery: false})
+	};
+
+	onPopupEvent = (eventName, index) => {
+		if (eventName !== 'itemSelected') return;
+		if (index === 0) this.props.reset();
 	};
 
 	_retrieveData = async () => {
@@ -92,13 +101,7 @@ class HomeScreen extends Component {
 							<Title>My Scans</Title>
 						</Body>
 						<Right>
-							<Button
-								transparent
-								accessibilityLabel={"Options"}
-								accessibilityHint={"Click to see more options"}
-							>
-								<Icon name='more'/>
-							</Button>
+							<PopUpMenu actions={['Reset']} onPress={this.onPopupEvent} />
 						</Right>
 					</Header>
 
@@ -112,6 +115,7 @@ class HomeScreen extends Component {
 							data={documents}
 							renderItem={({item}) => (
 								<DocumentScanCard
+									id={documents.indexOf(item)}
 									name={item.documentTitle}
 									date={this.state.date}
 									image={item.imageURI}/>
@@ -159,9 +163,18 @@ const mapStateToProps = (state) => {
 	}
 };
 
+const mapDispatchToProps = (dispatch) => {
+	return {
+		reset: () => {
+			dispatch(RESET_ACTION)
+		}
+	}
+};
+
 // `connect` returns a new function that accepts the component to wrap:
 const connectToStore = connect(
-	mapStateToProps
+	mapStateToProps,
+	mapDispatchToProps
 );
 
 const reduxHomeScreen = connectToStore(HomeScreen);

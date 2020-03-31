@@ -3,6 +3,7 @@ import {createStackNavigator} from "react-navigation-stack";
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import ImagePreview from "../components/Camera/ImagePreview";
 import confirmPDFScreen from '../screens/ConfirmPDFScreen/ConfirmPDFScreen'
+import ReaderScreen from "../screens/ReaderScreen/ReaderScreen";
 
 const screens = {
 	Home: {
@@ -13,6 +14,9 @@ const screens = {
 	},
 	ConfirmPDF: {
 		screen: confirmPDFScreen
+	},
+	ReaderScreen: {
+		screen: ReaderScreen
 	}
 };
 

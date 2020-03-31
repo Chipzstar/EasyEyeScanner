@@ -5,12 +5,13 @@ import AppContainer from "./app/routes/router";
 import 'react-native-gesture-handler';
 import * as Font from 'expo-font';
 import {AppLoading} from "expo";
-import {ActivityIndicator, AsyncStorage} from 'react-native'
+import {ActivityIndicator, AsyncStorage} from 'react-native';
+
 //Redux
 import {createStore, applyMiddleware} from "redux";
 import {Provider} from 'react-redux';
 import {persistStore, persistReducer} from 'redux-persist'
-import { PersistGate } from "redux-persist/es/integration/react";
+import {PersistGate} from "redux-persist/es/integration/react";
 import {createLogger} from 'redux-logger';
 //reducers
 import rootReducer from './store/index';
@@ -37,34 +38,29 @@ export default class App extends Component {
 		this.state = {
 			fontLoaded: false
 		};
-		const customPrefix = {
-			public: 'public/',
-			protected: 'protected/',
-			private: 'uploads/'
-		};
 		Storage.configure({level: 'private'});
 	}
 
-	async componentDidMount() {
-		await Font.loadAsync({
-			'Roboto_regular': require('./app/assets/fonts/Roboto-Regular.ttf'),
-			'Roboto_black': require('./app/assets/fonts/Roboto-Black.ttf'),
-			'Roboto_black_italic': require('./app/assets/fonts/Roboto-BlackItalic.ttf'),
-			'Roboto_bold': require('./app/assets/fonts/Roboto-Bold.ttf'),
-			'Roboto_bold_italic': require('./app/assets/fonts/Roboto-BoldItalic.ttf'),
-			'Roboto_italic': require('./app/assets/fonts/Roboto-Italic.ttf'),
-			'Roboto_light': require('./app/assets/fonts/Roboto-Light.ttf'),
-			'Roboto_light_italic': require('./app/assets/fonts/Roboto-LightItalic.ttf'),
-			'Roboto_medium': require('./app/assets/fonts/Roboto-Medium.ttf'),
-			'Roboto_thin': require('./app/assets/fonts/Roboto-Thin.ttf'),
-		});
-		this.setState({fontLoaded: true})
+	componentDidMount() {
+		Font.loadAsync({
+			Roboto_regular: require('./app/assets/fonts/Roboto-Regular.ttf'),
+			Roboto_black: require('./app/assets/fonts/Roboto-Black.ttf'),
+			Roboto_black_italic: require('./app/assets/fonts/Roboto-BlackItalic.ttf'),
+			Roboto_bold: require('./app/assets/fonts/Roboto-Bold.ttf'),
+			Roboto_bold_italic: require('./app/assets/fonts/Roboto-BoldItalic.ttf'),
+			Roboto_italic: require('./app/assets/fonts/Roboto-Italic.ttf'),
+			Roboto_light: require('./app/assets/fonts/Roboto-Light.ttf'),
+			Roboto_light_italic: require('./app/assets/fonts/Roboto-LightItalic.ttf'),
+			Roboto_medium: require('./app/assets/fonts/Roboto-Medium.ttf'),
+			Roboto_thin: require('./app/assets/fonts/Roboto-Thin.ttf'),
+			Ionicons: require('native-base/Fonts/Ionicons.ttf')
+		}).then(() => this.setState({fontLoaded: true})).catch(err => console.error(err));
 	}
 
 	renderLoading = () => {
 		return (
 			<Root>
-				<ActivityIndicator size={"large"} />
+				<ActivityIndicator size={"large"}/>
 			</Root>
 		);
 	};
@@ -77,6 +73,7 @@ export default class App extends Component {
 				</Root>
 			);
 		}
+		console.log("fonts loaded");
 		return (
 			<Provider store={reduxStore}>
 				<PersistGate persistor={persistedStore} loading={this.renderLoading()}>
