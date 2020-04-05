@@ -11,6 +11,10 @@ export default (styles = StyleSheet.create({
 	subText: {
 		fontSize: 18
 	},
+	segmentText: {
+		fontSize: 24,
+		color: 'white',
+	},
 	container: {
 		flex: 1,
 		justifyContent: 'flex-start',

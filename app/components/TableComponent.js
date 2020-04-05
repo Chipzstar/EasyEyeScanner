@@ -18,7 +18,7 @@ export default class TableComponent extends Component {
 		const { tableData } = this.state;
 		return (
 			<View style={styles.container}>
-				<Text>Table {this.props.index}</Text>
+				<Text style={styles.h1text}>Table {this.props.index+1}</Text>
 				<ScrollView horizontal={true}>
 					<View>
 						<ScrollView>
@@ -42,10 +42,11 @@ export default class TableComponent extends Component {
 }
 
 const styles = StyleSheet.create({
-	container: {flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff'},
+	container: {flex: 1, padding: 15, paddingTop: 30, backgroundColor: '#fff'},
+	h1text: { fontSize: 30},
 	header: {height: 50, backgroundColor: '#537791'},
 	wrapper: {flexDirection: 'row'},
 	text: {textAlign: 'center', fontWeight: '100', margin: 5},
-	row: {height: 40, backgroundColor: '#E7E6E1'}
+	row: {height: 50, backgroundColor: '#E7E6E1'}
 });
 

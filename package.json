@@ -5,7 +5,7 @@
     "web": "expo start --web",
     "start": "react-native start",
     "test": "jest",
-    "postinstall": "rimraf ./node_modules/expo/node_modules/expo-font"
+    "postinstall": "rimraf ./node_modules/expo/node_modules/expo-font && rndebugger-open"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.6",
@@ -14,6 +14,7 @@
     "aws-amplify": "^2.2.2",
     "aws-amplify-react-native": "^3.2.0",
     "buffer": "^5.4.3",
+    "d3-collection": "^1.0.7",
     "d3-dsv": "^1.2.0",
     "expo": "~36.0.0",
     "expo-asset": "^8.0.0",
@@ -23,11 +24,13 @@
     "expo-image-manipulator": "^8.0.0",
     "expo-image-picker": "^8.0.2",
     "expo-image-picker-multiple": "^1.1.5",
+    "expo-speech": "^8.1.0",
     "native-base": "2.13.8",
     "prop-types": "^15.7.2",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "~0.61.4",
+    "react-native-console-time-polyfill": "^1.2.1",
     "react-native-easy-grid": "^0.2.2",
     "react-native-gesture-handler": "^1.5.3",
     "react-native-image-preview": "^0.3.1",
@@ -56,6 +59,7 @@
     "jest": "~24.9.0",
     "metro-config": "latest",
     "metro-react-native-babel-preset": "~0.56.0",
+    "react-native-debugger-open": "^0.3.24",
     "react-test-renderer": "~16.9.0"
   },
   "jest": {

@@ -6,11 +6,13 @@ import path from 'react-native-path';
 import {Auth, Storage} from 'aws-amplify';
 import PDFReader from 'rn-pdf-reader-js';
 import {csvParseRows} from 'd3-dsv';
+import { Container, Segment, Header, Left, Body, Right, Button, Icon, Content } from "native-base";
 
 //styles
 import styles from "./styles";
 //components
 import Table from "../../components/TableComponent";
+import Form from "../../components/FormComponent";
 
 class ReaderScreen extends Component {
 	constructor(props) {
@@ -19,14 +21,45 @@ class ReaderScreen extends Component {
 			loading: false,
 			folder: "easy-eye-scanner",
 			identityId: null,
+			textractData: "",
 			tableCollection: [],
-			uri: null
+			formCollection: [],
+			uri: null,
+			isTableView: false,
+			isFormView: false
 		};
 	}
 
 	* enumerate(array) {
 		for (let i = 0; i < array.length; i += 1) {
 			yield [i, array[i]];
+		}
+	}
+
+	async downloadForms(s3_prefix){
+		try {
+			console.log("Prefix:", s3_prefix);
+			let forms = await Storage.list(`${s3_prefix}/forms`, {
+				level: 'private',
+				identityId: this.state.identityId
+			});
+			if (forms) {
+				for (let formObj of this.enumerate(forms)) {
+					console.log("Form Object", formObj);
+					//let index = formObj[0];
+					let key = formObj[1].key;
+					let formDataURL = await Storage.get(key, {
+						level: 'private',
+						identityId: this.state.identityId
+					});
+					let fileUri = await this.downloadFile(formDataURL, path.basename(key));
+					let content = await FileSystem.readAsStringAsync(fileUri);
+					let formData = JSON.parse(content);
+					this.setState({formCollection: [...this.state.formCollection, formData]});
+				}
+			}
+		} catch (e) {
+			console.error(e);
 		}
 	}
 
@@ -80,14 +113,16 @@ class ReaderScreen extends Component {
 			this.setState({identityId: (await Auth.currentCredentials()).identityId});
 			let key = this.props.documents[this.props.navigation.getParam('documentID')]['S3BucketKey'].replace(`private/${this.state.identityId}/`, "");
 			let s3Dirname = path.dirname(key);
-			let s3Filename = path.basename(key);
-			let preSignedUrl = await Storage.get(key, {
+			let s3Filename = path.basename(key, 'pdf');
+			let preSignedUrl = await Storage.get(`${s3Dirname}/${s3Filename}.txt`, {
 				level: 'private',
 				identityId: this.state.identityId
 			});
-			let uri = await this.downloadFile(preSignedUrl, s3Filename);
+			let uri = await this.downloadFile(preSignedUrl, `${s3Filename}.txt`);
+			let content = await FileSystem.readAsStringAsync(uri);
+			this.setState({textractData: content});
 			await this.downloadTables(s3Dirname);
-			this.setState({uri});
+			await this.downloadForms(s3Dirname);
 			this.hideLoading();
 		} catch (e) {
 			throw e;
@@ -102,35 +137,63 @@ class ReaderScreen extends Component {
 		this.setState({loading: false})
 	}
 
-	_renderItem = ({item, index}) => {
+	_renderTable = ({item, index}) => {
 		console.log("Table:", item);
 		return (
 			<Table data={item[1]} index={index} columns={item[0].length}/>
 		)
 	};
 
+	/*_renderForm = ({item, index}) => {
+		console.log("Form:", item);
+		return (
+			<Form data={item} index={index}/>
+		)
+	};*/
+
 	render() {
-		const {uri, loading, tableCollection} = this.state;
+		const { navigation } = this.props;
+		const {loading, textractData, tableCollection, formCollection, isTableView, isFormView} = this.state;
 		const loadingView = (
 			<View style={styles.loading}>
 				<ActivityIndicator size='large'/>
 			</View>
 		);
-		const ReaderView = <PDFReader source={{uri}}/>;
+		const ReaderView = (
+			<Text>{textractData}</Text>
+		);
+		const FormView = (
+			<Form data={formCollection[0]}/>
+			/*<FlatList
+				data={formCollection}
+				renderItem={this._renderForm}
+				keyExtractor={(item) => formCollection.indexOf(item).toString()}
+			>
+			</FlatList>*/
+		);
 		const TableView = (
 			<FlatList
 				data={tableCollection}
-				renderItem={this._renderItem}
+				renderItem={this._renderTable}
 				keyExtractor={(item) => String(item[0])}
 			>
 			</FlatList>
-			/*<Table data={tableCollection[0]}/>
-			<Table data={tableCollection[1]}/>
-			<Table data={tableCollection[2]}/>
-			<Table data={tableCollection[3]}/>*/
+		);
+		const MainView = (
+			<Container>
+				<View>
+					{isTableView
+						? TableView
+						: (isFormView
+								? FormView
+								: ReaderView
+						)
+					}
+				</View>
+			</Container>
 		);
 		if (loading) return loadingView;
-		else return TableView;
+		else return MainView;
 	}
 }
 
