@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.6",
-    "@react-native-community/masked-view": "^0.1.6",
+    "@react-native-community/masked-view": "0.1.5",
     "@react-native-community/netinfo": "^5.6.2",
     "aws-amplify": "^2.2.2",
     "aws-amplify-react-native": "^3.2.0",
@@ -24,7 +24,7 @@
     "expo-image-manipulator": "^8.0.0",
     "expo-image-picker": "^8.0.2",
     "expo-image-picker-multiple": "^1.1.5",
-    "expo-speech": "^8.1.0",
+    "expo-speech": "8.0.0",
     "native-base": "2.13.8",
     "prop-types": "^15.7.2",
     "react": "~16.9.0",

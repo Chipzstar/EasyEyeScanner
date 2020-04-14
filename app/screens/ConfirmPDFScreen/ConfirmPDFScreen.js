@@ -27,11 +27,13 @@ import {connect} from 'react-redux';
 
 //functions
 import GeneratePDF from "../../functions/generatePDF";
+import Loader from "../../components/Loader";
 
 class ConfirmPDFScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			loading: false,
 			saveToGallery: false,
 			success: false,
 			access: 'private',
@@ -55,16 +57,19 @@ class ConfirmPDFScreen extends Component {
 	}
 
 	saveDocuments = () => {
+		this.setState({loading: true});
+		let date = {createdAt: this.state.date.split("-").join("/")};
 		let title = {documentTitle: this.state.title};
 		let captures = {captures: this.props.captures};
 		let uri = {imageURI: this.state.ImageURI};
-		let document = Object.assign(title, uri, captures);
+		let document = Object.assign(title, date, uri, captures);
 		this.props.addDocument(document);
 		this.storeInS3().then(() => {
 			this.setState({success: true});
 			console.log(this.state.keys);
 			GeneratePDF(this.state.title).then((res) => {
 				console.log(res);
+				this.setState({loading: false});
 				let newDocument = Object.assign(document, res);
 				this.props.updateDocument(this.state.ImageURI, newDocument);
 				this.props.clearPhotos();
@@ -110,16 +115,18 @@ class ConfirmPDFScreen extends Component {
 	};
 
 	render() {
-		let {saveToGallery} = this.state;
+		let { navigation } = this.props;
+		let {loading, saveToGallery} = this.state;
 		return (
 			<Container>
+				<Loader	loading={loading} />
 				<Header>
 					<Left style={{flex: 1}}>
 						<Button
 							accessibilityLabel={'Back button'}
 							accessibilityHint={'Go back to previous screen'}
 							transparent
-							onPress={() => this.props.navigation.goBack()}>
+							onPress={() => navigation.goBack()}>
 							<Icon name="arrow-back"/>
 						</Button>
 					</Left>

@@ -42,6 +42,7 @@ export default class PopUpMenu extends Component {
 			>
 				<Icon
 					name='more'
+					color={this.props.color}
 					ref={this.onRef}
 				/>
 			</Button>

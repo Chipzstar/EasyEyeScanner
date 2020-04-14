@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Container, Header, Button, Body, Title, Left, Right, Icon, Content, Fab} from "native-base";
-import {AsyncStorage, FlatList, StatusBar, Text} from "react-native";
+import {AsyncStorage, FlatList, StatusBar, Text, View} from "react-native";
 import {Constants, Permissions} from 'react-native-unimodules';
 import {connect} from 'react-redux';
 import {YellowBox} from 'react-native';
@@ -11,6 +11,7 @@ import { RESET_ACTION } from "../../../store";
 import DocumentScanCard from '../../components/CardComponent';
 import CameraComponent from "../../components/Camera/CameraComponent";
 import ImageBrowserComponent from "../../components/ImageGallery/ImageBrowserComponent";
+import {Auth, Storage} from "aws-amplify";
 
 YellowBox.ignoreWarnings([
 	'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -104,27 +105,21 @@ class HomeScreen extends Component {
 							<PopUpMenu actions={['Reset']} onPress={this.onPopupEvent} />
 						</Right>
 					</Header>
-
-					<Content
-						padder
-						style={{flex: 1}}
-						contentContainerStyle={{flex: 1}}
-						scrollEnabled={false}
-					>
+					<View style={{flex: 1,padding: 10}}>
 						<FlatList
 							data={documents}
 							renderItem={({item}) => (
 								<DocumentScanCard
 									id={documents.indexOf(item)}
 									name={item.documentTitle}
-									date={this.state.date}
+									date={item.createdAt}
 									image={item.imageURI}/>
 							)}
 							keyExtractor={(item) => documents.indexOf(item).toString()}
 							showsVerticalScrollIndicator={false}
 						>
 						</FlatList>
-					</Content>
+					</View>
 					<Fab
 						active={this.state.active}
 						direction="up"

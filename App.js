@@ -77,7 +77,9 @@ export default class App extends Component {
 		return (
 			<Provider store={reduxStore}>
 				<PersistGate persistor={persistedStore} loading={this.renderLoading()}>
-					<AppContainer/>
+					<Root>
+						<AppContainer/>
+					</Root>
 				</PersistGate>
 			</Provider>
 		);

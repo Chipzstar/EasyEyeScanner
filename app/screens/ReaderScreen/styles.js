@@ -16,10 +16,7 @@ export default (styles = StyleSheet.create({
 		color: 'white',
 	},
 	container: {
-		flex: 1,
-		justifyContent: 'flex-start',
-		alignItems: 'center',
-		marginTop: 25,
+		flex: 1
 	},
 	loading: {
 		position: 'absolute',
@@ -36,5 +33,11 @@ export default (styles = StyleSheet.create({
 		flex:1,
 		width: WIDTH,
 		height: HEIGHT,
-	}
+	},
+	infoText: {
+		fontSize: 30,
+		fontFamily: 'Roboto',
+		marginTop: 30,
+		textAlign: 'center'
+	},
 }));

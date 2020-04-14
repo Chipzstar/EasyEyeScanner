@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, ScrollView, Text} from 'react-native';
+import {View, StyleSheet, ScrollView, Text, BackHandler} from 'react-native';
 import {Table, Row, Rows, Col, Cols, Cell, TableWrapper} from 'react-native-table-component';
 
 export default class TableComponent extends Component {
@@ -11,11 +11,28 @@ export default class TableComponent extends Component {
 	}
 
 	componentDidMount() {
+		BackHandler.addEventListener(
+			'hardwareBackPress',
+			this.handleBackButtonPressAndroid
+		);
 		this.props.data ? this.setState({tableData: this.props.data}) : console.log("waiting for data prop...");
+	}
+
+	handleBackButtonPressAndroid = () => {
+		this.props.hideTables();
+		return true;
+	};
+
+	componentWillUnmount() {
+		BackHandler.removeEventListener(
+			'hardwareBackPress',
+			this.handleBackButtonPressAndroid
+		);
 	}
 
 	render() {
 		const { tableData } = this.state;
+
 		return (
 			<View style={styles.container}>
 				<Text style={styles.h1text}>Table {this.props.index+1}</Text>
