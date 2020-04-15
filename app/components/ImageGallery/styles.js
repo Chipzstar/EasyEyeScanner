@@ -10,6 +10,7 @@ export default (styles = StyleSheet.create({
 	},
 	emptyStay: {
 		textAlign: 'center',
+		fontSize: 28
 	},
 	countBadge: {
 		paddingHorizontal: 8.6,

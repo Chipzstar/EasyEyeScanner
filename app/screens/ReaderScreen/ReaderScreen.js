@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, FlatList, Text, View} from 'react-native';
+import { FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import * as FileSystem from 'expo-file-system';
 import path from 'react-native-path';
@@ -14,6 +14,7 @@ import Table from "../../components/TableComponent";
 import Form from "../../components/FormComponent";
 import PopUpMenu from "../../components/PopUpMenu";
 import SpeechComponent from "../../components/SpeechComponent";
+import Loader from "../../components/Loader";
 
 class ReaderScreen extends Component {
 	constructor(props) {
@@ -110,7 +111,7 @@ class ReaderScreen extends Component {
 
 	async componentDidMount() {
 		try {
-			this.showLoading();
+			this.setState({loading: true})
 			this.setState({identityId: (await Auth.currentCredentials()).identityId});
 			let key = this.props.documents[this.props.navigation.getParam('documentID')]['S3BucketKey'].replace(`private/${this.state.identityId}/`, "");
 			let s3Dirname = path.dirname(key);
@@ -125,18 +126,10 @@ class ReaderScreen extends Component {
 			console.log(content);
 			await this.downloadTables(s3Dirname);
 			await this.downloadForms(s3Dirname);
-			this.hideLoading();
+			this.setState({loading: false})
 		} catch (e) {
 			throw e;
 		}
-	}
-
-	showLoading() {
-		this.setState({loading: true})
-	}
-
-	hideLoading() {
-		this.setState({loading: false})
 	}
 
 	_renderTable = ({item, index}) => {
@@ -165,7 +158,7 @@ class ReaderScreen extends Component {
 		const {loading, textractData, tableCollection, formCollection, isTableView, isFormView} = this.state;
 		const loadingView = (
 			<View style={styles.loading}>
-				<ActivityIndicator size='large'/>
+				<Loader loading={loading}/>
 			</View>
 		);
 		const ReaderView = (
@@ -176,7 +169,7 @@ class ReaderScreen extends Component {
 							<Icon name="arrow-back"/>
 						</Button>
 					</Left>
-					<Body style={{flex:1,alignItems:'center'}}>
+					<Body style={{flex: 1, alignItems: 'center'}}>
 						<Title>Reader</Title>
 					</Body>
 					<Right style={{flex: 1}}>
@@ -197,20 +190,23 @@ class ReaderScreen extends Component {
 							<Icon name="arrow-back"/>
 						</Button>
 					</Left>
-					<Body style={{flex:1,alignItems:'center'}}>
+					<Body style={{flex: 1, alignItems: 'center'}}>
 						<Title>Tables</Title>
 					</Body>
 					<Right style={{flex: 1}}>
 						<PopUpMenu actions={['View Tables', 'View Forms']} onPress={this.onPopupEvent}/>
 					</Right>
 				</Header>
-				{tableCollection ?
+				{tableCollection.length !== 0 ?
 					<FlatList
 						data={tableCollection}
 						renderItem={this._renderTable}
 						keyExtractor={(item) => String(item[0])}
 					>
-					</FlatList> : <Text style={styles.infoText}>There are no tables for this document!</Text>
+					</FlatList> :
+					<View style={{flexGrow: 1, alignItems: 'center', justifyContent: 'center'}}>
+						<Text style={styles.infoText}>There are no tables for this document!</Text>
+					</View>
 				}
 			</Container>
 		);

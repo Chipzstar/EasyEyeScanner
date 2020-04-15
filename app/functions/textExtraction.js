@@ -2,13 +2,15 @@ import {API} from 'aws-amplify';
 import React from 'react';
 import awsmobile from "../../aws-exports";
 
-export default async function TextIdentification() {
+export default async function TextIdentification(s3_prefix) {
 	try {
 		console.log('Function entered...');
 		let apiName = awsmobile.aws_cloud_logic_custom[0].name;
 		let path = '/scan/getText';
 		let myInit = { // OPTIONAL
-			body: {}, // replace this with attributes you need
+			body: {
+				key: s3_prefix
+			}, // replace this with attributes you need
 			headers: {
 				'Content-Type': "application/json",
 				'Accept': "application/json"

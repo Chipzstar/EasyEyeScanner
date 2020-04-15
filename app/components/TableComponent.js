@@ -32,7 +32,6 @@ export default class TableComponent extends Component {
 
 	render() {
 		const { tableData } = this.state;
-
 		return (
 			<View style={styles.container}>
 				<Text style={styles.h1text}>Table {this.props.index+1}</Text>

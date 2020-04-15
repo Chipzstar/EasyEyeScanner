@@ -1,18 +1,49 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Modal, TouchableOpacity} from 'react-native';
 import * as Speech from 'expo-speech';
-import {Container, Content, Footer, FooterTab, Button, ActionSheet} from "native-base";
+import {
+	Container,
+	Content,
+	Footer,
+	FooterTab,
+	Button,
+	ActionSheet
+} from "native-base";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 
-const BUTTONS = [
+const MAIN_OPTIONS = [
 	{text: "Increase Font Size", icon: "arrow-round-up", iconColor: "#0c9809"},
 	{text: "Decrease Font Size", icon: "arrow-round-down", iconColor: "red"},
 	{text: "Increase Speech Rate", icon: "arrow-round-up", iconColor: "#0c9809"},
 	{text: "Decrease Speech Rate", icon: "arrow-round-down", iconColor: "red"},
+	{text: "Change Contrast", icon: "contrast", iconColor: "orange"},
 	{text: "Cancel", icon: "close", iconColor: "blue"}
 ];
 
-const CANCEL_INDEX = 4;
+const CONTRAST_OPTIONS = [
+	{text: "Default", icon: "contrast", iconColor: "#0c9809"},
+	{text: "White on Black (Inverted)", icon: "contrast", iconColor: "black"},
+	{text: "Yellow on Black", icon: "contrast", iconColor: "yellow"},
+	{text: "Cancel", icon: "close", iconColor: "blue"}
+]
+
+const pickerValues = [
+	{
+		title: 'Black on White (Default)',
+		color: 'black',
+		backgroundColor: '#F5FCFF'
+	},
+	{
+		title: 'White on Black (Inverted)',
+		color: 'white',
+		backgroundColor: '#333333'
+	},
+	{
+		title: 'Yellow on Black',
+		color: '#fccb00',
+		backgroundColor: '#333333'
+	}
+]
 
 export default class SpeechComponent extends Component {
 	constructor(props) {
@@ -22,6 +53,11 @@ export default class SpeechComponent extends Component {
 			currentSizeIndex: 4,
 			fontSizes: [18, 20, 22, 24, 26, 28, 30, 32, 36, 40],
 			clicked: null,
+			pickerDisplayed: false,
+			pickerSelection: {
+				color: 'black',
+				backgroundColor: '#F5FCFF'
+			},
 			pitch: 1,
 			rate: 1
 		};
@@ -29,7 +65,7 @@ export default class SpeechComponent extends Component {
 
 	componentDidMount() {
 		this.props.data ? this.setState({txtSpeak: this.props.data}) : console.log("waiting for data prop...");
-		Speech.getAvailableVoicesAsync().then(r => console.log(r.slice(0, 10)));
+		//Speech.getAvailableVoicesAsync().then(r => console.log(r.slice(0, 3)));
 	};
 
 	_stopHandler() {
@@ -48,12 +84,56 @@ export default class SpeechComponent extends Component {
 		console.log('Speech started...');
 	};
 
+	setPickerValue(newValue) {
+		this.setState({pickerSelection: newValue})
+		this.togglePicker();
+	}
+
+	togglePicker() {
+		this.setState({pickerDisplayed: !this.state.pickerDisplayed})
+	}
+
 	render() {
-		const {txtSpeak, currentSizeIndex, fontSizes, rate} = this.state;
+		const {txtSpeak, currentSizeIndex, fontSizes, rate, pickerDisplayed, pickerSelection} = this.state;
+		const contrastModal = (
+			<Modal visible={pickerDisplayed} animationType={"slide"} transparent={true}>
+				<View style={{
+					margin: 20,
+					padding: 20,
+					backgroundColor: '#efefef',
+					bottom: 35,
+					left: 20,
+					right: 20,
+					borderRadius: 10,
+					shadowOffset:{  width: 10,  height: 10},
+					shadowColor: 'black',
+					shadowOpacity: 1.0,
+					alignItems: 'center',
+					position: 'absolute'
+				}}>
+					<Text style={{fontSize: 15}}>Please pick a contrast mode</Text>
+					{pickerValues.map((item, index) => {
+						return (
+							<TouchableOpacity
+								key={index}
+								onPress={() => this.setPickerValue(item)}
+								style={{paddingTop: 5, paddingBottom: 5}}
+							>
+								<View>
+									<Text style={{fontSize: 20}}>{item.title}</Text>
+								</View>
+							</TouchableOpacity>
+						)
+					})}
+				</View>
+			</Modal>
+		)
 		return (
-			<Container style={styles.container}>
+			<Container style={{flex: 1, backgroundColor: pickerSelection.backgroundColor}}>
 				<Content>
-					<Text style={{fontSize: fontSizes[currentSizeIndex]}}>{txtSpeak}</Text>
+					{contrastModal}
+					<Text
+						style={{fontSize: fontSizes[currentSizeIndex], color: pickerSelection.color}}>{txtSpeak}</Text>
 				</Content>
 				<Footer>
 					<FooterTab>
@@ -68,35 +148,37 @@ export default class SpeechComponent extends Component {
 						<Button vertical onPress={() =>
 							ActionSheet.show(
 								{
-									options: BUTTONS,
-									cancelButtonIndex: CANCEL_INDEX,
+									options: MAIN_OPTIONS,
+									cancelButtonIndex: MAIN_OPTIONS.length - 1,
 									title: "Options"
 								},
 								buttonIndex => {
-									console.log(buttonIndex);
 									if (buttonIndex === 0) {
-										this.setState({currentSizeIndex: currentSizeIndex < fontSizes.length - 1 ?
-												currentSizeIndex + 1 : currentSizeIndex});
+										this.setState({
+											currentSizeIndex: currentSizeIndex < fontSizes.length - 1 ?
+												currentSizeIndex + 1 : currentSizeIndex
+										});
 										/*console.log("index:", currentSizeIndex + 1);
 										console.log("Current font size:",fontSizes[currentSizeIndex + 1]);*/
-									}
-									else if (buttonIndex === 1) {
-										this.setState({currentSizeIndex: currentSizeIndex > 0 ?
-												currentSizeIndex - 1 : currentSizeIndex});
+									} else if (buttonIndex === 1) {
+										this.setState({
+											currentSizeIndex: currentSizeIndex > 0 ?
+												currentSizeIndex - 1 : currentSizeIndex
+										});
 										/*console.log("index", currentSizeIndex - 1);
 										console.log("Current font size:",fontSizes[currentSizeIndex - 1]);*/
-									}
-									else if (buttonIndex === 2) {
+									} else if (buttonIndex === 2) {
 										this.setState({rate: rate < 5 ? rate + 0.5 : rate});
 										this._startHandler();
 										console.log("Current speech rate:", rate + 0.5);
-									}
-									else if (buttonIndex === 3) {
+									} else if (buttonIndex === 3) {
 										this.setState({rate: rate > 0 ? rate - 0.5 : rate});
 										this._startHandler();
 										console.log("Current speech rate:", rate - 0.5);
+									} else if (buttonIndex === 4) {
+										this.setState({pickerDisplayed: true})
 									}
-									this.setState({clicked: BUTTONS[buttonIndex]});
+									this.setState({clicked: MAIN_OPTIONS[buttonIndex]});
 								}
 							)}
 						>
@@ -113,9 +195,5 @@ export default class SpeechComponent extends Component {
 const styles = StyleSheet.create({
 	iconText: {
 		color: 'white'
-	},
-	container: {
-		flex: 1,
-		backgroundColor: '#F5FCFF',
 	}
 });

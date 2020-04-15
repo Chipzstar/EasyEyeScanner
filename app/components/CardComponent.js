@@ -1,14 +1,21 @@
-import React from 'react';
-import {Image, Text, StyleSheet, TouchableOpacity, Alert, ToastAndroid} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+	Image,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	Alert,
+	ToastAndroid
+} from 'react-native';
 import {Body, CardItem, Icon, Left, Right, Thumbnail, Card} from "native-base";
 import thumbnail from "../assets/images/document-thumbnail.png";
 import {withNavigation} from 'react-navigation'
-import {useDispatch} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {Storage, Auth} from 'aws-amplify';
-
-
 //actions
 import {removeDocument} from "../../store/actions/documentsAction";
+//functions
+import textExtraction from "../functions/textExtraction";
 
 const removeFromS3 = (documentName) => {
 	Auth.currentCredentials().then(r => {
@@ -27,7 +34,25 @@ const removeFromS3 = (documentName) => {
 };
 
 const CardComponent = props => {
+	const [loading, setLoading] = useState(true);
+	const [apiCount, setAPITracker] = useState(0);
+	const count = useRef(apiCount);
 	const dispatch = useDispatch();
+	const document = useSelector(state => state.documents.documents);
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			let key = document[props.id]['S3BucketKey'].split('.pdf').join('.txt');
+			console.log(key);
+			textExtraction(key).then(res => {
+				console.log(res);
+				if (res["SUCCESS"]) setLoading(false);
+				else setAPITracker(count + 1);
+			}).catch(err => {
+				console.error(err);
+			});
+		}, 5000);
+		return () => clearTimeout(timer)
+	}, [apiCount]);
 	return (
 		<Card>
 			<CardItem
@@ -68,7 +93,16 @@ const CardComponent = props => {
 						accessibilityHint={"Opens the document in screen reader"}
 						accessibilityRole={"button"}
 						style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end', height: 30}}
-						onPress={() => props.navigation.navigate('ReaderScreen', {documentID: props.id})}
+						onPress={() => {
+							loading ?
+								Alert.alert(
+									"Document still being processed...",
+									"Make sure you have an internet connection before trying to read this document",
+									[
+										{text: "Ok", onPress: () => console.log("Ok pressed"), style: "default"}
+									]
+								) : props.navigation.navigate('ReaderScreen', {documentID: props.id})
+						}}
 					>
 						<Icon name={"book"}/>
 						<Text style={styles.iconText}>Read</Text>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Container, Header, Button, Body, Title, Left, Right, Icon, Content, Fab} from "native-base";
-import {AsyncStorage, FlatList, StatusBar, Text, View} from "react-native";
+import {AsyncStorage, FlatList, StatusBar, View} from "react-native";
 import {Constants, Permissions} from 'react-native-unimodules';
 import {connect} from 'react-redux';
 import {YellowBox} from 'react-native';
@@ -36,7 +36,6 @@ class HomeScreen extends Component {
 		const year = new Date().getFullYear(); //Current Year
 		this.setState({date: date + '/' + month + '/' + year});
 		this._retrieveData().then(res => {
-			console.log(res);
 			if (res.documents.documents) console.log(JSON.parse(res.documents))
 		});//Current Date
 	}

@@ -3,7 +3,7 @@ import {
 	StyleSheet,
 	View,
 	Modal,
-	ActivityIndicator
+	ActivityIndicator, Text
 } from 'react-native';
 
 const Loader = props => {
@@ -15,12 +15,13 @@ const Loader = props => {
 	return (
 		<Modal
 			transparent={true}
-			animationType={'none'}
+			animationType={'fade'}
 			visible={loading}
 			onRequestClose={() => {console.log('close modal')}}>
 			<View style={styles.modalBackground}>
 				<View style={styles.activityIndicatorWrapper}>
 					<ActivityIndicator size={"large"} animating={loading} />
+					<Text style={{fontSize: 23}}>Loading...</Text>
 				</View>
 			</View>
 		</Modal>
@@ -37,8 +38,8 @@ const styles = StyleSheet.create({
 	},
 	activityIndicatorWrapper: {
 		backgroundColor: '#FFFFFF',
-		height: 100,
-		width: 100,
+		height: 120,
+		width: 120,
 		borderRadius: 10,
 		display: 'flex',
 		alignItems: 'center',

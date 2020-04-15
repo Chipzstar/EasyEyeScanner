@@ -1,8 +1,8 @@
 {
-  "dev": true,
-  "minify": false,
+  "urlRandomness": "vx-8gd",
   "hostType": "lan",
   "lanType": "ip",
-  "urlRandomness": "xr-s6y",
+  "dev": true,
+  "minify": false,
   "https": false
 }

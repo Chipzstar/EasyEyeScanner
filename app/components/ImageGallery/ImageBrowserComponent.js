@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {ActivityIndicator, BackHandler, StatusBar, Text, TouchableOpacity, View} from 'react-native';
 import {ImageBrowser} from 'expo-image-picker-multiple';
-import * as ImageManipulator from 'expo-image-manipulator';
 import {withNavigation} from 'react-navigation';
-import {Permissions} from "react-native-unimodules";
+import { Permissions } from "react-native-unimodules";
 import {Body, Button, Container, Header, Icon, Left, Right, Title} from "native-base";
 import {connect} from 'react-redux';
 
 import styles from './styles';
 import {addPhoto} from "../../../store/actions/capturesAction";
+import Loader from "../Loader";
 
 class ImageBrowserComponent extends Component {
 	constructor(props) {
@@ -26,6 +26,20 @@ class ImageBrowserComponent extends Component {
 			'hardwareBackPress',
 			this.handleBackButtonPressAndroid
 		);
+		/*FileSystem.downloadAsync(
+          'https://i.stack.imgur.com/ZS6nH.png',
+          FileSystem.documentDirectory + 'image_5.jpg'
+        )
+          .then(({uri}) => {
+            console.log('Finished downloading to ', uri);
+            MediaLibrary.saveToLibraryAsync(uri)
+            .then(() => {
+                console.log("file saved to media library");
+                //MediaLibrary.getAssetsAsync( {mediaType: 'photo'}).then(res => console.log(res));
+            })
+            .catch(err => console.error(err));
+          })
+          .catch(error => console.error(error));*/
 		const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 		this.setState({hasCameraRollPermission: status === 'granted'});
 	}
@@ -43,7 +57,7 @@ class ImageBrowserComponent extends Component {
 	};
 
 	imagesCallback = (callback) => {
-		const {navigation} = this.props;
+		const {navigation } = this.props;
 		callback.then(async (photos) => {
 			for (let photo of photos) {
 				this.props.addPhoto({
@@ -55,14 +69,6 @@ class ImageBrowserComponent extends Component {
 			navigation.navigate('ConfirmPDF', {hideCamera: this.props.hideImageExplorer});
 		}).catch((e) => console.log(e)).finally(() => navigation.setParams({loading: false}));
 	};
-
-	async _processImageAsync(uri) {
-		return await ImageManipulator.manipulateAsync(
-			uri,
-			[{resize: {width: 1000}}],
-			{compress: 0.8, format: ImageManipulator.SaveFormat.JPEG}
-		);
-	}
 
 	updateHandler = (count, onSubmit) => {
 		this.setState({
@@ -78,10 +84,14 @@ class ImageBrowserComponent extends Component {
 	);
 
 	render() {
-		const emptyStayComponent = <Text style={styles.emptyStay}>Empty =(</Text>;
+		const emptyStayComponent = <Text style={styles.emptyStay}>No images found in camera roll!</Text>;
 		const submitButton = (
 			<Right>
-				<Button transparent onPress={() => this.state.onSubmit()}>
+				<Button
+					accessibilityLabel={"Done"}
+					accessibilityHint={"Press to confirm the select selected images to use in document"}
+					accessibilityRole={'button'}
+					transparent onPress={() => this.state.onSubmit()}>
 					<Text style={{color: 'white', fontSize: 18, fontWeight: "300"}}>Done</Text>
 				</Button>
 			</Right>
@@ -109,7 +119,7 @@ class ImageBrowserComponent extends Component {
 					callback={this.imagesCallback}
 					preloaderComponent={(
 						<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-							<ActivityIndicator size={"large"}/>
+							<Loader loading={true}/>
 						</View>
 					)}
 					renderSelectedComponent={this.renderSelectedComponent}

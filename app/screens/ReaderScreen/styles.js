@@ -16,7 +16,8 @@ export default (styles = StyleSheet.create({
 		color: 'white',
 	},
 	container: {
-		flex: 1
+		flex: 1,
+		backgroundColor: '#F5FCFF'
 	},
 	loading: {
 		position: 'absolute',
@@ -25,7 +26,7 @@ export default (styles = StyleSheet.create({
 		top: 0,
 		bottom: 0,
 		opacity: 0.5,
-		backgroundColor: 'black',
+		backgroundColor: 'white',
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
