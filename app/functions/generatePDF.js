@@ -4,8 +4,7 @@ import awsmobile from "../../aws-exports";
 
 export default async function GeneratePDF(pdfName) {
 	try {
-		let creds = await Auth.currentCredentials(); //This will give unauthenticated credentials object
-		let identityID = creds.identityId;
+		let identityID = (await Auth.currentCredentials()).identityId; //This will give unauthenticated credentials object
 		console.log("identityID:", identityID);
 		console.log("pdfName:", pdfName);
 		let apiName = awsmobile.aws_cloud_logic_custom[0].name;
@@ -22,7 +21,8 @@ export default async function GeneratePDF(pdfName) {
 			response: true// OPTIONAL
 		};
 		console.log('Making Api request...');
-		API.post(apiName, path, myInit).then(res => console.log(res.data)).catch(err => console.error(err));
+		let result = await API.post(apiName, path, myInit);
+		return result.data;
 	} catch (err) {
 		console.error(err);
 	}

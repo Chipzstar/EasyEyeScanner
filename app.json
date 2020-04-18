@@ -5,7 +5,6 @@
     "name": "EasyEyeScanner",
     "slug": "expo-template-bare",
     "privacy": "unlisted",
-    "sdkVersion": "36.0.0",
     "version": "1.0.0",
     "entryPoint": "node_modules/expo/AppEntry.js",
     "platforms": [
@@ -18,7 +17,8 @@
       "resizeMode": "cover"
     },
     "assetBundlePatterns": [
-      "app/assets/images/*"
+      "app/assets/images/*",
+      "app/assets/fonts/*"
     ]
   }
 }

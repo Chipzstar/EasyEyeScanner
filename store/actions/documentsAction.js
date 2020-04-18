@@ -9,17 +9,19 @@ export const addDocument = (document) => {
 	}
 };
 
-export const removeDocument= (documentId) => {
+export const removeDocument= (imageURI) => {
 	return {
 		type: REMOVE_DOCUMENT,
-		id: documentId
+		documentId: imageURI
 	}
 };
 
-export const updateDocument = (imageURI) => {
+export const updateDocument = (imageURI, newDocument) => {
 	return {
 		type: UPDATE_DOCUMENT,
-		docURI: imageURI
+		documentId: imageURI,
+		newDocument: newDocument
+
 	}
 };
 

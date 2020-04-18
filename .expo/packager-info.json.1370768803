@@ -1,0 +1,9 @@
+{
+  "expoServerNgrokUrl": "https://zk-2wf.chipzstar.easyeyescanner.exp.direct",
+  "packagerNgrokUrl": "https://packager.zk-2wf.chipzstar.easyeyescanner.exp.direct",
+  "ngrokPid": 19112,
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 2368
+}
