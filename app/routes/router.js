@@ -39,7 +39,7 @@ export const MainStack = createDrawerNavigator(screens, config);
 /*export const RootNavigator = createSwitchNavigator(
 	{
 		AuthLoading: AuthLoadingScreen,
-		App: SignedIn,
+		App: MainStack,
 		Auth: SignedOut
 	},
 	{

@@ -37,7 +37,7 @@ export default class PopUpMenu extends Component {
 			<Button
 				transparent
 				accessibilityLabel={"Options"}
-				accessibilityHint={"Click to see more options"}
+				accessibilityHint={"Press to see more options"}
 				onPress={this.onPress}
 			>
 				<Icon

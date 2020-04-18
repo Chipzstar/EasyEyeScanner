@@ -19,6 +19,10 @@
     "assetBundlePatterns": [
       "app/assets/images/*",
       "app/assets/fonts/*"
-    ]
+    ],
+    "android": {
+      "package": "com.universityofsussex.easyeyescanner",
+      "versionCode": 1
+    }
   }
 }

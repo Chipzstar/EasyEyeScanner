@@ -1,4 +1,4 @@
-import {ADD_DOCUMENT, REMOVE_DOCUMENT, UPDATE_DOCUMENT} from "../actions/documentsAction";
+import {ADD_DOCUMENT, REMOVE_DOCUMENT, UPDATE_DOCUMENT, CLEAR} from "../actions/documentsAction";
 
 const initialState = {
 	documents: []
@@ -20,6 +20,8 @@ const documentsReducer = (state = initialState, action) => {
 			updatedDocuments = [...state.documents];
 			updatedDocuments.splice(index, 1);
 			return {...state, documents: updatedDocuments};
+		case CLEAR:
+			return {...state, documents: []};
 		default:
 			return state;
 	}

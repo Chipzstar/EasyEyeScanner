@@ -114,7 +114,7 @@ class ImageBrowserComponent extends Component {
 					{this.state.numSelected > 0 ? submitButton : <Right/>}
 				</Header>
 				<ImageBrowser
-					max={4}
+					max={10}
 					onChange={this.updateHandler}
 					callback={this.imagesCallback}
 					preloaderComponent={(

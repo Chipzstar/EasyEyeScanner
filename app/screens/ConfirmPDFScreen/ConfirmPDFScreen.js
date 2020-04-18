@@ -62,7 +62,8 @@ class ConfirmPDFScreen extends Component {
 		let title = {documentTitle: this.state.title};
 		let captures = {captures: this.props.captures};
 		let uri = {imageURI: this.state.ImageURI};
-		let document = Object.assign(title, date, uri, captures);
+		let state = {status: "PENDING"};
+		let document = Object.assign(title, date, uri, captures, state);
 		this.props.addDocument(document);
 		this.storeInS3().then(() => {
 			this.setState({success: true});
@@ -70,7 +71,8 @@ class ConfirmPDFScreen extends Component {
 			GeneratePDF(this.state.title).then((res) => {
 				console.log(res);
 				this.setState({loading: false});
-				let newDocument = Object.assign(document, res);
+				let newDocument = {...document, ...res, status: "COMPLETE"};
+				console.log("NEW DOCUMENT", newDocument);
 				this.props.updateDocument(this.state.ImageURI, newDocument);
 				this.props.clearPhotos();
 				this.props.navigation.state.params.hideCamera();
