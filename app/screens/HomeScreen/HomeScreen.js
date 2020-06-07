@@ -4,7 +4,6 @@ import {AsyncStorage, FlatList, StatusBar, Text, View, Alert} from "react-native
 import {Constants, Permissions} from 'react-native-unimodules';
 import {connect} from 'react-redux';
 import {YellowBox} from 'react-native';
-import {Auth, Storage} from "aws-amplify";
 import PopUpMenu from "../../components/PopUpMenu";
 import {RESET_ACTION} from "../../../store";
 //components
@@ -12,7 +11,8 @@ import DocumentScanCard from '../../components/CardComponent';
 import CameraComponent from "../../components/Camera/CameraComponent";
 import ImageBrowserComponent from "../../components/ImageGallery/ImageBrowserComponent";
 //functions
-import { clear } from "../../../store/actions/documentsAction";
+import { clearDocuments } from "../../../store/actions/documentsAction";
+import { clearPhotos } from "../../../store/actions/capturesAction";
 
 YellowBox.ignoreWarnings([
 	'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -64,6 +64,7 @@ class HomeScreen extends Component {
 
 	clearAll = () => {
 		this.props.clearDocuments();
+		this.props.clearPhotos();
 		this.props.reset();
 	}
 
@@ -178,7 +179,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		clearDocuments: () => {
-			dispatch(clear());
+			dispatch(clearDocuments());
+		},
+		clearPhotos: () => {
+			dispatch(clearPhotos());
 		},
 		reset: () => {
 			dispatch(RESET_ACTION)

@@ -25,7 +25,7 @@ export const replacePhoto = (oldURI, newPhoto) => {
 	}
 };
 
-export const clear = () => {
+export const clearPhotos = () => {
 	return {
 		type: CLEAR
 	}

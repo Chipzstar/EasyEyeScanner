@@ -36,17 +36,6 @@ const config = {
 
 export const MainStack = createDrawerNavigator(screens, config);
 
-/*export const RootNavigator = createSwitchNavigator(
-	{
-		AuthLoading: AuthLoadingScreen,
-		App: MainStack,
-		Auth: SignedOut
-	},
-	{
-		initialRouteName: "AuthLoading"
-	}
-);*/
-
 const AppContainer = createAppContainer(MainStack);
 
 export default AppContainer;

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {FlatList, Image, View, TouchableOpacity, StyleSheet} from "react-native";
 import {addDocument, updateDocument} from "../../../store/actions/documentsAction";
-import {clear} from "../../../store/actions/capturesAction";
+import {clearPhotos} from "../../../store/actions/capturesAction";
 import shorthash from 'shorthash';
 import {FileSystem} from "react-native-unimodules";
 import {Storage} from 'aws-amplify';
@@ -231,7 +231,7 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(updateDocument(imageURI, newDocument))
 		},
 		clearPhotos: () => {
-			dispatch(clear())
+			dispatch(clearPhotos())
 		}
 	}
 };

@@ -62,7 +62,6 @@ class ImagePreview extends Component {
 		let {photoData} = this.state;
 		let key = this.props.captures.findIndex(photo => photo.uri === photoData.uri) + 1;
 		console.log("key: ", key);
-		//const ratio = photoData.height / photoData.width;
 		return (
 			<Container>
 				<Header>

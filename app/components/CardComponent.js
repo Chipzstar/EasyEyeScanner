@@ -11,7 +11,7 @@ import {Body, CardItem, Icon, Left, Right, Thumbnail, Card} from "native-base";
 import thumbnail from "../assets/images/document-thumbnail.png";
 import {useSelector, useDispatch} from "react-redux";
 import {Storage, Auth} from 'aws-amplify';
-import { NavigationActions, withNavigation } from "react-navigation";
+import { withNavigation } from "react-navigation";
 //actions
 import {removeDocument, updateDocument} from "../../store/actions/documentsAction";
 //functions
@@ -168,7 +168,7 @@ const CardComponent = props => {
 							)
 						}}
 					>
-						<Icon name={"trash"} fontSize={32}/>
+						<Icon name={"trash"} fontSize={32} color={'black'}/>
 						<Text style={styles.iconText}>Delete</Text>
 					</TouchableOpacity>
 				</Right>

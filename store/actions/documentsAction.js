@@ -25,7 +25,7 @@ export const updateDocument = (imageURI, newDocument) => {
 	}
 };
 
-export const clear = () => {
+export const clearDocuments = () => {
 	return {
 		type: CLEAR
 	}

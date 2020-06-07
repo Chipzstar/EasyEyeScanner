@@ -44,7 +44,7 @@ export default class TableComponent extends Component {
 										key={index}
 										data={rowData}
 										widthArr={Array.from(this.props.data[0]).fill(100)}
-										style={[styles.row, index % 2 && {backgroundColor: '#F7F6E7'}]}
+										style={[styles.row, index % 2 && {backgroundColor: '#f7f6e7'}]}
 										textStyle={styles.text}
 									/>
 								))}
@@ -63,6 +63,6 @@ const styles = StyleSheet.create({
 	header: {height: 50, backgroundColor: '#537791'},
 	wrapper: {flexDirection: 'row'},
 	text: {textAlign: 'center', fontWeight: '100', margin: 5},
-	row: {height: 50, backgroundColor: '#E7E6E1'}
+	row: {height: 50, backgroundColor: '#e7e6e1'}
 });
 
