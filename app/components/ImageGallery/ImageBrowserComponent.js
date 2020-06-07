@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, BackHandler, StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {BackHandler, StatusBar, Text, View} from 'react-native';
 import {ImageBrowser} from 'expo-image-picker-multiple';
 import {withNavigation} from 'react-navigation';
 import { Permissions } from "react-native-unimodules";
 import {Body, Button, Container, Header, Icon, Left, Right, Title} from "native-base";
 import {connect} from 'react-redux';
-
+import * as FileSystem from 'expo-file-system';
 import styles from './styles';
-import {addPhoto} from "../../../store/actions/capturesAction";
+import {addPhoto, clearPhotos} from "../../../store/actions/capturesAction";
 import Loader from "../Loader";
+import * as MediaLibrary from "expo-media-library";
 
 class ImageBrowserComponent extends Component {
 	constructor(props) {
@@ -26,9 +27,9 @@ class ImageBrowserComponent extends Component {
 			'hardwareBackPress',
 			this.handleBackButtonPressAndroid
 		);
-		/*FileSystem.downloadAsync(
+		FileSystem.downloadAsync(
           'https://i.stack.imgur.com/ZS6nH.png',
-          FileSystem.documentDirectory + 'image_5.jpg'
+          FileSystem.documentDirectory + 'image_1.jpg'
         )
           .then(({uri}) => {
             console.log('Finished downloading to ', uri);
@@ -39,7 +40,7 @@ class ImageBrowserComponent extends Component {
             })
             .catch(err => console.error(err));
           })
-          .catch(error => console.error(error));*/
+          .catch(error => console.error(error));
 		const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 		this.setState({hasCameraRollPermission: status === 'granted'});
 	}
@@ -114,7 +115,7 @@ class ImageBrowserComponent extends Component {
 					{this.state.numSelected > 0 ? submitButton : <Right/>}
 				</Header>
 				<ImageBrowser
-					max={4}
+					max={10}
 					onChange={this.updateHandler}
 					callback={this.imagesCallback}
 					preloaderComponent={(
@@ -140,7 +141,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		addPhoto: (photo) => {
 			dispatch(addPhoto(photo))
-		}
+		},
+		clearPhotos: () => dispatch(clearPhotos())
 	}
 };
 

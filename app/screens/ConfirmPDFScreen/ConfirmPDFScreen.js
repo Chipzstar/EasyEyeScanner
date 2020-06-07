@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {FlatList, Image, View, TouchableOpacity, StyleSheet} from "react-native";
 import {addDocument, updateDocument} from "../../../store/actions/documentsAction";
-import {clear} from "../../../store/actions/capturesAction";
+import {clearPhotos} from "../../../store/actions/capturesAction";
 import shorthash from 'shorthash';
 import {FileSystem} from "react-native-unimodules";
 import {Storage} from 'aws-amplify';
@@ -62,7 +62,8 @@ class ConfirmPDFScreen extends Component {
 		let title = {documentTitle: this.state.title};
 		let captures = {captures: this.props.captures};
 		let uri = {imageURI: this.state.ImageURI};
-		let document = Object.assign(title, date, uri, captures);
+		let state = {status: "PENDING"};
+		let document = Object.assign(title, date, uri, captures, state);
 		this.props.addDocument(document);
 		this.storeInS3().then(() => {
 			this.setState({success: true});
@@ -70,7 +71,8 @@ class ConfirmPDFScreen extends Component {
 			GeneratePDF(this.state.title).then((res) => {
 				console.log(res);
 				this.setState({loading: false});
-				let newDocument = Object.assign(document, res);
+				let newDocument = {...document, ...res, status: "COMPLETE"};
+				console.log("NEW DOCUMENT", newDocument);
 				this.props.updateDocument(this.state.ImageURI, newDocument);
 				this.props.clearPhotos();
 				this.props.navigation.state.params.hideCamera();
@@ -229,7 +231,7 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(updateDocument(imageURI, newDocument))
 		},
 		clearPhotos: () => {
-			dispatch(clear())
+			dispatch(clearPhotos())
 		}
 	}
 };

@@ -20,13 +20,6 @@ const MAIN_OPTIONS = [
 	{text: "Cancel", icon: "close", iconColor: "blue"}
 ];
 
-const CONTRAST_OPTIONS = [
-	{text: "Default", icon: "contrast", iconColor: "#0c9809"},
-	{text: "White on Black (Inverted)", icon: "contrast", iconColor: "black"},
-	{text: "Yellow on Black", icon: "contrast", iconColor: "yellow"},
-	{text: "Cancel", icon: "close", iconColor: "blue"}
-]
-
 const pickerValues = [
 	{
 		title: 'Black on White (Default)',
@@ -158,15 +151,11 @@ export default class SpeechComponent extends Component {
 											currentSizeIndex: currentSizeIndex < fontSizes.length - 1 ?
 												currentSizeIndex + 1 : currentSizeIndex
 										});
-										/*console.log("index:", currentSizeIndex + 1);
-										console.log("Current font size:",fontSizes[currentSizeIndex + 1]);*/
 									} else if (buttonIndex === 1) {
 										this.setState({
 											currentSizeIndex: currentSizeIndex > 0 ?
 												currentSizeIndex - 1 : currentSizeIndex
 										});
-										/*console.log("index", currentSizeIndex - 1);
-										console.log("Current font size:",fontSizes[currentSizeIndex - 1]);*/
 									} else if (buttonIndex === 2) {
 										this.setState({rate: rate < 5 ? rate + 0.5 : rate});
 										this._startHandler();

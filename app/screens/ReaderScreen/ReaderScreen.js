@@ -165,7 +165,10 @@ class ReaderScreen extends Component {
 			<Container style={styles.container}>
 				<Header>
 					<Left style={{flex: 1}}>
-						<Button transparent onPress={() => navigation.goBack()}>
+						<Button
+							accessibilityLabel={"Back button"}
+							accessibilityHint={"Navigates to home screen"}
+							transparent onPress={() => navigation.goBack()}>
 							<Icon name="arrow-back"/>
 						</Button>
 					</Left>

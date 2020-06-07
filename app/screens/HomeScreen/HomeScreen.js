@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
-import {Container, Header, Button, Body, Title, Left, Right, Icon, Content, Fab} from "native-base";
-import {AsyncStorage, FlatList, StatusBar, View} from "react-native";
+import {Container, Header, Button, Body, Title, Left, Right, Icon, Fab} from "native-base";
+import {AsyncStorage, FlatList, StatusBar, Text, View, Alert} from "react-native";
 import {Constants, Permissions} from 'react-native-unimodules';
 import {connect} from 'react-redux';
 import {YellowBox} from 'react-native';
 import PopUpMenu from "../../components/PopUpMenu";
-import { RESET_ACTION } from "../../../store";
-
+import {RESET_ACTION} from "../../../store";
 //components
 import DocumentScanCard from '../../components/CardComponent';
 import CameraComponent from "../../components/Camera/CameraComponent";
 import ImageBrowserComponent from "../../components/ImageGallery/ImageBrowserComponent";
-import {Auth, Storage} from "aws-amplify";
+//functions
+import { clearDocuments } from "../../../store/actions/documentsAction";
+import { clearPhotos } from "../../../store/actions/capturesAction";
 
 YellowBox.ignoreWarnings([
 	'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -36,7 +37,7 @@ class HomeScreen extends Component {
 		const year = new Date().getFullYear(); //Current Year
 		this.setState({date: date + '/' + month + '/' + year});
 		this._retrieveData().then(res => {
-			if (res.documents.documents) console.log(JSON.parse(res.documents))
+			console.log(res);
 		});//Current Date
 	}
 
@@ -61,9 +62,20 @@ class HomeScreen extends Component {
 		this.setState({isCamera: false, isImageGallery: false})
 	};
 
+	clearAll = () => {
+		this.props.clearDocuments();
+		this.props.clearPhotos();
+		this.props.reset();
+	}
+
 	onPopupEvent = (eventName, index) => {
 		if (eventName !== 'itemSelected') return;
-		if (index === 0) this.props.reset();
+		if (index === 0) {
+			Alert.alert("WARNING", "You are about to clear all your documents, are you sure you want to do this?", [
+				{text: "Yes", onPress: () => this.clearAll(), style: "destructive"},
+				{text: "Cancel", onPress: () => console.log("Cancel pressed"), style: "cancel"}
+			])
+		}
 	};
 
 	_retrieveData = async () => {
@@ -101,24 +113,31 @@ class HomeScreen extends Component {
 							<Title>My Scans</Title>
 						</Body>
 						<Right>
-							<PopUpMenu actions={['Reset']} onPress={this.onPopupEvent} />
+							<PopUpMenu actions={['Reset']} onPress={this.onPopupEvent}/>
 						</Right>
 					</Header>
-					<View style={{flex: 1,padding: 10}}>
-						<FlatList
-							data={documents}
-							renderItem={({item}) => (
-								<DocumentScanCard
-									id={documents.indexOf(item)}
-									name={item.documentTitle}
-									date={item.createdAt}
-									image={item.imageURI}/>
-							)}
-							keyExtractor={(item) => documents.indexOf(item).toString()}
-							showsVerticalScrollIndicator={false}
-						>
-						</FlatList>
-					</View>
+					{documents.length > 0 ?
+						<View style={{flex: 1, padding: 10}}>
+							<FlatList
+								data={documents}
+								renderItem={({item}) => (
+									<DocumentScanCard
+										id={documents.indexOf(item)}
+										name={item.documentTitle}
+										date={item.createdAt}
+										image={item.imageURI}/>
+								)}
+								keyExtractor={(item) => documents.indexOf(item).toString()}
+								showsVerticalScrollIndicator={false}
+							>
+							</FlatList>
+						</View> :
+						<View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
+							<Text style={{fontSize: 26, fontWeight: "bold", fontFamily: "Roboto"}}>You don't have any scans</Text>
+							<Text style={{fontSize: 18, fontFamily: "Roboto"}}>Start by selecting the '+' button below</Text>
+						</View>
+					}
+
 					<Fab
 						active={this.state.active}
 						direction="up"
@@ -159,6 +178,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		clearDocuments: () => {
+			dispatch(clearDocuments());
+		},
+		clearPhotos: () => {
+			dispatch(clearPhotos());
+		},
 		reset: () => {
 			dispatch(RESET_ACTION)
 		}
